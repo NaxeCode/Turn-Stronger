@@ -268,7 +268,7 @@ class TiledLevel extends TiledMap
 				// {
 				// tile.colorTransform.blueOffset += 1;
 				// }
-				map.overlapsWithCallback(obj, bump);
+				// map.overlapsWithCallback(obj, bump);
 				return true;
 			}
 		}
