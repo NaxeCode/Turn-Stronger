@@ -3,6 +3,7 @@ package;
 import flixel.FlxG;
 import flixel.FlxObject;
 import flixel.FlxSprite;
+import flixel.FlxState;
 import flixel.addons.editors.tiled.TiledImageLayer;
 import flixel.addons.editors.tiled.TiledImageTile;
 import flixel.addons.editors.tiled.TiledLayer.TiledLayerType;
@@ -37,7 +38,7 @@ class TiledLevel extends TiledMap
 	// Sprites of images layers
 	public var imagesLayer:FlxGroup;
 
-	public function new(tiledLevel:FlxTiledMapAsset, state:PlayState)
+	public function new(tiledLevel:FlxTiledMapAsset, state:Dynamic)
 	{
 		super(tiledLevel);
 
@@ -130,7 +131,7 @@ class TiledLevel extends TiledMap
 		return special;
 	}
 
-	public function loadObjects(state:PlayState)
+	public function loadObjects(state:Dynamic)
 	{
 		for (layer in layers)
 		{
@@ -198,7 +199,7 @@ class TiledLevel extends TiledMap
 		backgroundLayer.add(decoSprite);
 	}
 
-	function loadObject(state:PlayState, o:TiledObject, g:TiledObjectLayer, group:FlxGroup)
+	function loadObject(state:Dynamic, o:TiledObject, g:TiledObjectLayer, group:FlxGroup)
 	{
 		var x:Int = o.x;
 		var y:Int = o.y;
@@ -229,6 +230,18 @@ class TiledLevel extends TiledMap
 			// var tileset = g.map.getGidOwner(o.gid);
 			// var coin = new FlxSprite(x, y, c_PATH_LEVEL_TILESHEETS + tileset.imageSource);
 			// state.coins.add(coin);
+
+			case "npc":
+				var npc = new NPC(x, y);
+				// Graphic / Animation handling
+				switch (o.name.toLowerCase())
+				{
+					case "noah":
+						npc.loadGraphic(AssetPaths.Noah__png, false, 32, 64);
+					case null:
+						trace("no npc has that name");
+				}
+				state.npcs.add(npc);
 
 			case "exit":
 				// Create the level exit
