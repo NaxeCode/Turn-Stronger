@@ -29,6 +29,8 @@ class Tutorial extends FlxState
 
 		level = new TiledLevel("assets/tiled/tutorial.tmx", this);
 
+		add(npcs);
+
 		add(level.backgroundLayer);
 
 		add(level.objectsLayer);

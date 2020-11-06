@@ -37,17 +37,20 @@ class PlayState extends FlxState
 
 		player = new Player(0, 0);
 
-		level = new TiledLevel("assets/tiled/smb.tmx", this);
+		/*
 
-		add(level.backgroundLayer);
+			level = new TiledLevel("assets/tiled/smb.tmx", this);
 
-		add(level.imagesLayer);
+			add(level.backgroundLayer);
 
-		add(level.objectsLayer);
+			add(level.imagesLayer);
 
-		add(player);
+			add(level.objectsLayer);
 
-		add(level.foregroundTiles);
+			add(player);
+
+			add(level.foregroundTiles);
+		 */
 
 		// enemy = new Enemy(300, 250);
 		// add(enemy);
@@ -60,7 +63,7 @@ class PlayState extends FlxState
 
 		super.update(elapsed);
 
-		level.collideWithLevel(player);
+		// level.collideWithLevel(player);
 
 		// FlxG.overlap(exit, player, win);
 

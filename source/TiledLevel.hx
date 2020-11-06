@@ -38,7 +38,7 @@ class TiledLevel extends TiledMap
 	// Sprites of images layers
 	public var imagesLayer:FlxGroup;
 
-	public function new(tiledLevel:FlxTiledMapAsset, state:Dynamic)
+	public function new(tiledLevel:FlxTiledMapAsset, state:Tutorial)
 	{
 		super(tiledLevel);
 
@@ -131,7 +131,7 @@ class TiledLevel extends TiledMap
 		return special;
 	}
 
-	public function loadObjects(state:Dynamic)
+	public function loadObjects(state:Tutorial)
 	{
 		for (layer in layers)
 		{
@@ -199,7 +199,7 @@ class TiledLevel extends TiledMap
 		backgroundLayer.add(decoSprite);
 	}
 
-	function loadObject(state:Dynamic, o:TiledObject, g:TiledObjectLayer, group:FlxGroup)
+	function loadObject(state:Tutorial, o:TiledObject, g:TiledObjectLayer, group:FlxGroup)
 	{
 		var x:Int = o.x;
 		var y:Int = o.y;
@@ -245,11 +245,11 @@ class TiledLevel extends TiledMap
 
 			case "exit":
 				// Create the level exit
-				var exit = new FlxSprite(x, y);
-				exit.makeGraphic(32, 32, 0xff3f3f3f);
-				exit.exists = false;
-				state.exit = exit;
-				group.add(exit);
+				// var exit = new FlxSprite(x, y);
+				// exit.makeGraphic(32, 32, 0xff3f3f3f);
+				// exit.exists = false;
+				// state.exit = exit;
+				// group.add(exit);
 		}
 	}
 
@@ -277,11 +277,6 @@ class TiledLevel extends TiledMap
 			//            This prevents odd collision errors (collision separation code off by 1 px).
 			if (FlxG.overlap(map, obj, notifyCallback, processCallback != null ? processCallback : FlxObject.separate))
 			{
-				// for (tile in )
-				// {
-				// tile.colorTransform.blueOffset += 1;
-				// }
-				// map.overlapsWithCallback(obj, bump);
 				return true;
 			}
 		}
