@@ -22,6 +22,6 @@
  <objectgroup id="3" name="objects">
   <object id="1" name="start" type="player_start" x="48" y="341.667" width="32" height="32"/>
   <object id="2" name="floor" type="floor" x="-198.333" y="391.667" width="1152" height="32"/>
-  <object id="3" name="noah" type="npc" x="172.667" y="319" width="32" height="64"/>
+  <object id="3" name="noah" type="npc" x="160" y="320" width="32" height="64"/>
  </objectgroup>
 </map>
