@@ -5,6 +5,7 @@ import flixel.FlxObject;
 import flixel.FlxSprite;
 import flixel.FlxState;
 import flixel.group.FlxGroup;
+import flixel.util.FlxColor;
 
 class Tutorial extends FlxState
 {
@@ -23,6 +24,8 @@ class Tutorial extends FlxState
 	override public function create()
 	{
 		super.create();
+
+		FlxG.camera.flash(FlxColor.BLACK, 4);
 
 		FlxG.camera.bgColor = 0xFF202e45;
 
