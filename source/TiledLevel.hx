@@ -232,16 +232,14 @@ class TiledLevel extends TiledMap
 			// state.coins.add(coin);
 
 			case "npc":
-				var npc = new NPC(x, y);
-				// Graphic / Animation handling
+				// position handling
 				switch (o.name.toLowerCase())
 				{
 					case "noah":
-						npc.loadGraphic(AssetPaths.Noah__png, false, 32, 64);
+						state.noah.setPosition(x, y);
 					case null:
 						trace("no npc has that name");
 				}
-				state.npcs.add(npc);
 
 			case "exit":
 				// Create the level exit

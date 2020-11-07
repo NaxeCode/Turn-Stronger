@@ -12,6 +12,7 @@ class Tutorial extends FlxState
 
 	public var player:Player;
 	public var enemy:FlxGroup;
+	public var noah:NPC;
 	public var npcs:FlxTypedGroup<NPC>;
 
 	public var floor:FlxObject;
@@ -27,11 +28,15 @@ class Tutorial extends FlxState
 
 		player = new Player(0, 0);
 
-		npcs = new FlxTypedGroup<NPC>(0);
+		noah = new NPC(0, 0);
+		noah.loadGraphic(AssetPaths.Noah__png, false, 32, 64);
+		noah.setFacingFlip(FlxObject.LEFT, true, false);
+		noah.setFacingFlip(FlxObject.RIGHT, false, false);
 
 		level = new TiledLevel("assets/tiled/tutorial.tmx", this);
 
-		add(npcs);
+		add(noah);
+		noah.facing = FlxObject.LEFT;
 
 		add(level.backgroundLayer);
 
