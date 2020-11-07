@@ -23,6 +23,8 @@ class Tutorial extends FlxState
 	{
 		super.create();
 
+		FlxG.camera.bgColor = 0xFF202e45;
+
 		player = new Player(0, 0);
 
 		npcs = new FlxTypedGroup<NPC>(0);
