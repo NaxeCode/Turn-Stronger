@@ -14,7 +14,7 @@ class Player extends FlxSprite
 		super(X, Y);
 
 		// makeGraphic(16, 16, FlxColor.fromInt(0xFF273769));
-		loadGraphic(AssetPaths.player__png, true, 32, 32);
+		loadGraphic(AssetPaths.player_no_glass__png, true, 32, 32);
 
 		setFacingFlip(FlxObject.LEFT, true, false);
 		setFacingFlip(FlxObject.RIGHT, false, false);
