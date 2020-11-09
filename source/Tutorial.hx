@@ -19,6 +19,8 @@ class Tutorial extends FlxState
 	public var floor:FlxObject;
 	public var exitTrigger:FlxObject;
 
+	public var dialogueBox:DialogueBox;
+
 	static var youDied:Bool = false;
 
 	override public function create()
@@ -48,6 +50,16 @@ class Tutorial extends FlxState
 		add(player);
 
 		add(level.foregroundTiles);
+
+		var dilog_boxes:Array<String> = openfl.Assets.getText(AssetPaths.tutorial__txt).split("@@");
+
+		for (di in dilog_boxes)
+		{
+			trace(di);
+		}
+
+		dialogueBox = new DialogueBox();
+		add(dialogueBox);
 	}
 
 	override public function update(elapsed:Float)
