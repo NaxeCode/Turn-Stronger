@@ -1,5 +1,6 @@
 package;
 
+import flixel.FlxCamera;
 import flixel.FlxG;
 import flixel.FlxObject;
 import flixel.FlxSprite;
@@ -23,6 +24,10 @@ class Tutorial extends FlxState
 
 	static var youDied:Bool = false;
 
+	public static var gameCamera:FlxCamera;
+
+	var uiCamera:FlxCamera;
+
 	override public function create()
 	{
 		super.create();
@@ -30,6 +35,22 @@ class Tutorial extends FlxState
 		FlxG.camera.flash(FlxColor.BLACK, 4);
 
 		FlxG.camera.bgColor = 0xFF202e45;
+
+		var dilog_boxes:Array<String> = openfl.Assets.getText(AssetPaths.tutorial__txt).split("@@");
+
+		for (di in dilog_boxes)
+		{
+			trace(di);
+		}
+
+		dialogueBox = new DialogueBox();
+		add(dialogueBox);
+
+		gameCamera = new FlxCamera(0, 0, FlxG.width, FlxG.height);
+		uiCamera = new FlxCamera(0, 0, FlxG.width, FlxG.height);
+
+		gameCamera.bgColor = 0xff626a71;
+		uiCamera.bgColor = FlxColor.TRANSPARENT;
 
 		player = new Player(0, 0);
 
@@ -51,15 +72,17 @@ class Tutorial extends FlxState
 
 		add(level.foregroundTiles);
 
-		var dilog_boxes:Array<String> = openfl.Assets.getText(AssetPaths.tutorial__txt).split("@@");
+		gameCamera.follow(player);
+		gameCamera.zoom = 2;
 
-		for (di in dilog_boxes)
-		{
-			trace(di);
-		}
+		FlxG.cameras.reset(gameCamera);
+		FlxG.cameras.add(uiCamera);
 
-		dialogueBox = new DialogueBox();
-		add(dialogueBox);
+		FlxCamera.defaultCameras = [gameCamera];
+		gameCamera.camera.setScrollBoundsRect(0, 0, level.fullWidth, level.fullHeight, true);
+		dialogueBox.cameras = [uiCamera];
+
+		dialogueBox.scrollFactor.set(0, 0);
 	}
 
 	override public function update(elapsed:Float)

@@ -47,8 +47,6 @@ class TiledLevel extends TiledMap
 		objectsLayer = new FlxGroup();
 		backgroundLayer = new FlxGroup();
 
-		FlxG.camera.setScrollBoundsRect(0, 0, fullWidth, fullHeight, true);
-
 		loadImages();
 		loadObjects(state);
 
@@ -217,8 +215,6 @@ class TiledLevel extends TiledMap
 				// player.maxVelocity.y = 400;
 				// player.acceleration.y = 400;
 				// player.drag.x = player.maxVelocity.x * 4;
-				FlxG.camera.follow(state.player);
-				FlxG.camera.zoom = 2;
 				state.player.setPosition(x, y);
 			// group.add(state.player);
 
