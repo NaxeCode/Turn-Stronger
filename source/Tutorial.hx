@@ -40,7 +40,7 @@ class Tutorial extends FlxState
 
 		if (FlxG.sound.music == null) // don't restart the music if it's already playing
 		{
-			FlxG.sound.playMusic("assets/music/Pinksand.ogg", 0.5, true);
+			FlxG.sound.playMusic("assets/music/Pinksand.ogg", 0.2, true);
 		}
 
 		for (di in dilog_boxes)
