@@ -38,6 +38,11 @@ class Tutorial extends FlxState
 
 		var dilog_boxes:Array<String> = openfl.Assets.getText(AssetPaths.tutorial__txt).split("@@");
 
+		if (FlxG.sound.music == null) // don't restart the music if it's already playing
+		{
+			FlxG.sound.playMusic("assets/music/Pinksand.ogg", 0.5, true);
+		}
+
 		for (di in dilog_boxes)
 		{
 			trace(di);
@@ -87,6 +92,10 @@ class Tutorial extends FlxState
 
 	override public function update(elapsed:Float)
 	{
+		if (FlxG.keys.justPressed.F)
+		{
+			FlxG.fullscreen = !FlxG.fullscreen;
+		}
 		super.update(elapsed);
 
 		level.collideWithLevel(player);
