@@ -3,15 +3,20 @@ package;
 import flixel.FlxG;
 import flixel.FlxObject;
 import flixel.FlxSprite;
+import flixel.system.FlxSound;
 import flixel.util.FlxColor;
 
 class Player extends FlxSprite
 {
 	var jumpPower:Int = 200;
 
+	var splatSound:FlxSound;
+
 	public function new(X:Int = 0, Y:Int = 0)
 	{
 		super(X, Y);
+
+		splatSound = FlxG.sound.load(AssetPaths.splat__ogg, 1);
 
 		// makeGraphic(16, 16, FlxColor.fromInt(0xFF273769));
 		loadGraphic(AssetPaths.player_no_glass__png, true, 32, 32);
@@ -54,6 +59,11 @@ class Player extends FlxSprite
 		if (FlxG.keys.anyJustPressed([SPACE, UP, W]) && isTouching(FlxObject.FLOOR))
 		{
 			velocity.y = -jumpPower;
+		}
+
+		if (justTouched(FlxObject.FLOOR))
+		{
+			splatSound.play();
 		}
 
 		super.update(elapsed);
