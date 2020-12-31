@@ -34,8 +34,6 @@ class Tutorial extends FlxState
 
 		FlxG.camera.flash(FlxColor.BLACK, 4);
 
-		FlxG.camera.bgColor = 0xFF202e45;
-
 		var dilog_boxes:Array<String> = openfl.Assets.getText(AssetPaths.tutorial__txt).split("@@");
 
 		if (FlxG.sound.music == null) // don't restart the music if it's already playing
@@ -54,7 +52,7 @@ class Tutorial extends FlxState
 		gameCamera = new FlxCamera(0, 0, FlxG.width, FlxG.height);
 		uiCamera = new FlxCamera(0, 0, FlxG.width, FlxG.height);
 
-		gameCamera.bgColor = 0xff626a71;
+		gameCamera.bgColor = 0xFF17142d;
 		uiCamera.bgColor = FlxColor.TRANSPARENT;
 
 		player = new Player(0, 0);
