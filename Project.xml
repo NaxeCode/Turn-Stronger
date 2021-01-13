@@ -39,6 +39,8 @@
 	<haxelib name="flixel-addons" />
 
 	<haxelib name="hxcpp-debug-server" />
+	
+	<haxelib name="ldtk-haxe-api" />
 
 	<!--In case you want to use the ui package-->
 	<!--<haxelib name="flixel-ui" />-->
