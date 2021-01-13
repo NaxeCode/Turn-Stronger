@@ -118,7 +118,7 @@ class Tutorial extends FlxState
 		npcs = new FlxTypedGroup<NPC>();
 
 		noah = new NPC(0, 0);
-		noah.text = "suh dude, new and improved noah here.";
+		noah.text = "suh dude, can't a guy float in peace?";
 		noah.loadGraphic(AssetPaths.Noah__png, false, 32, 64);
 		noah.setFacingFlip(FlxObject.LEFT, true, false);
 		noah.setFacingFlip(FlxObject.RIGHT, false, false);
