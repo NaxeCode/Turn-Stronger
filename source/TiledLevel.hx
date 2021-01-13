@@ -216,6 +216,7 @@ class TiledLevel extends TiledMap
 				// player.acceleration.y = 400;
 				// player.drag.x = player.maxVelocity.x * 4;
 				state.player.setPosition(x, y);
+				state.player.last.set(state.player.x, state.player.y);
 			// group.add(state.player);
 
 			case "floor":
@@ -233,8 +234,10 @@ class TiledLevel extends TiledMap
 				{
 					case "noah":
 						state.noah.setPosition(x, y);
+						state.noah.last.set(state.noah.x, state.noah.y);
 					case "oldnoah":
 						state.oldnoah.setPosition(x, y);
+						state.oldnoah.last.set(state.oldnoah.x, state.oldnoah.y);
 					case null:
 						trace("no npc has that name");
 				}
