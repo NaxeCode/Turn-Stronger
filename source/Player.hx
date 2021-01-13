@@ -42,8 +42,7 @@ class Player extends FlxSprite
 	{
 		handleAnimation();
 
-		if (Reg.canMove)
-			handleMovement();
+		handleMovement();
 
 		handleSound();
 
@@ -53,6 +52,9 @@ class Player extends FlxSprite
 	function handleMovement()
 	{
 		acceleration.x = 0;
+
+		if (!Reg.canMove)
+			return;
 
 		if (FlxG.keys.anyPressed([LEFT, A]))
 		{
