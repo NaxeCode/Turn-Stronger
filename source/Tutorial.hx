@@ -150,9 +150,6 @@ class Tutorial extends FlxState
 	{
 		if (FlxG.keys.justPressed.Z)
 		{
-			trace(dialogueBox.visible);
-			trace(dialogueBox.typeText._typing);
-
 			if (dialogueBox.visible)
 			{
 				if (!dialogueBox.typeText._typing)
