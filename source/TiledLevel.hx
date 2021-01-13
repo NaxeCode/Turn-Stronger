@@ -233,6 +233,8 @@ class TiledLevel extends TiledMap
 				{
 					case "noah":
 						state.noah.setPosition(x, y);
+					case "oldnoah":
+						state.oldnoah.setPosition(x, y);
 					case null:
 						trace("no npc has that name");
 				}

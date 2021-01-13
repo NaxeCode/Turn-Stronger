@@ -1,20 +1,26 @@
 package;
 
+import DeepKnight;
 import flixel.FlxCamera;
 import flixel.FlxG;
 import flixel.FlxObject;
 import flixel.FlxSprite;
 import flixel.FlxState;
 import flixel.group.FlxGroup;
+import flixel.math.FlxMath;
+import flixel.tile.FlxTilemap;
 import flixel.util.FlxColor;
+import flixel.util.FlxSort;
+import flixel.util.FlxStringUtil;
+import haxe.Json;
 
 class Tutorial extends FlxState
 {
 	public var level:TiledLevel;
-
 	public var player:Player;
 	public var enemy:FlxGroup;
 	public var noah:NPC;
+	public var oldnoah:NPC;
 	public var npcs:FlxTypedGroup<NPC>;
 
 	public var floor:FlxObject;
@@ -26,11 +32,25 @@ class Tutorial extends FlxState
 
 	public static var gameCamera:FlxCamera;
 
+	var _collisionMap:FlxTilemap;
+
 	var uiCamera:FlxCamera;
 
 	override public function create()
 	{
 		super.create();
+
+		/*
+			_collisionMap = new FlxTilemap();
+
+			var p = new DeepKnight();
+			var level = p.all_levels.Your_typical_2D_platformer;
+
+			var collisionLayer = level.l_Collisions.intGrid;
+			var layerWidth = level.l_Collisions.cWid;
+			// FlxStringUtil.arrayToCSV(collisionLayer, layerWidth);
+			trace(collisionLayer);
+		 */
 
 		FlxG.camera.flash(FlxColor.BLACK, 4);
 
@@ -38,7 +58,7 @@ class Tutorial extends FlxState
 
 		if (FlxG.sound.music == null) // don't restart the music if it's already playing
 		{
-			FlxG.sound.playMusic("assets/music/Pinksand.ogg", 0.2, true);
+			// FlxG.sound.playMusic("assets/music/Pinksand.ogg", 0.2, true);
 		}
 
 		for (di in dilog_boxes)
@@ -57,14 +77,27 @@ class Tutorial extends FlxState
 
 		player = new Player(0, 0);
 
+		npcs = new FlxTypedGroup<NPC>();
+
 		noah = new NPC(0, 0);
+		noah.text = "suh dude, new and improved noah here.";
 		noah.loadGraphic(AssetPaths.Noah__png, false, 32, 64);
 		noah.setFacingFlip(FlxObject.LEFT, true, false);
 		noah.setFacingFlip(FlxObject.RIGHT, false, false);
 
+		oldnoah = new NPC(0, 0);
+		oldnoah.text = "Hey! This is noah's old graphic";
+		oldnoah.loadGraphic(AssetPaths.Noah_no_glass__png, false, 32, 64);
+		oldnoah.setFacingFlip(FlxObject.LEFT, true, false);
+		oldnoah.setFacingFlip(FlxObject.RIGHT, false, false);
+
 		level = new TiledLevel("assets/tiled/tutorial.tmx", this);
 
+		npcs.add(noah);
+		npcs.add(oldnoah);
 		add(noah);
+		add(oldnoah);
+
 		noah.facing = FlxObject.LEFT;
 
 		add(level.backgroundLayer);
@@ -91,9 +124,10 @@ class Tutorial extends FlxState
 	override public function update(elapsed:Float)
 	{
 		if (FlxG.keys.justPressed.F)
-		{
 			FlxG.fullscreen = !FlxG.fullscreen;
-		}
+
+		handleDialogBox();
+
 		super.update(elapsed);
 
 		level.collideWithLevel(player);
@@ -102,6 +136,38 @@ class Tutorial extends FlxState
 		{
 			youDied = true;
 			FlxG.resetState();
+		}
+	}
+
+	function handleDialogBox()
+	{
+		if (FlxG.keys.justPressed.Z)
+		{
+			trace(dialogueBox.visible);
+			trace(dialogueBox.typeText._typing);
+
+			if (dialogueBox.visible)
+			{
+				if (!dialogueBox.typeText._typing)
+				{
+					Reg.canMove = true;
+					dialogueBox.visible = false;
+				}
+				else
+				{
+					dialogueBox.typeText.skip();
+				}
+			}
+			else if (!dialogueBox.visible)
+			{
+				for (member in npcs)
+				{
+					if (FlxMath.isDistanceWithin(member, player, 75))
+					{
+						dialogueBox.say(member.text);
+					}
+				}
+			}
 		}
 	}
 
