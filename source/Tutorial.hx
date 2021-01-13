@@ -9,6 +9,8 @@ import flixel.FlxState;
 import flixel.group.FlxGroup;
 import flixel.math.FlxMath;
 import flixel.tile.FlxTilemap;
+import flixel.tweens.FlxEase;
+import flixel.tweens.FlxTween;
 import flixel.util.FlxColor;
 import flixel.util.FlxSort;
 import flixel.util.FlxStringUtil;
@@ -154,6 +156,7 @@ class Tutorial extends FlxState
 			{
 				if (!dialogueBox.typeText._typing)
 				{
+					FlxTween.tween(gameCamera, {zoom: 2}, 0.5, {ease: FlxEase.backOut});
 					Reg.canMove = true;
 					dialogueBox.visible = false;
 				}
@@ -169,6 +172,7 @@ class Tutorial extends FlxState
 					if (FlxMath.isDistanceWithin(member, player, 75))
 					{
 						dialogueBox.say(member.text);
+						FlxTween.tween(gameCamera, {zoom: 4}, 0.5, {ease: FlxEase.backOut});
 					}
 				}
 			}
