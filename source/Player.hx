@@ -42,6 +42,16 @@ class Player extends FlxSprite
 	{
 		handleAnimation();
 
+		if (Reg.canMove)
+			handleMovement();
+
+		handleSound();
+
+		super.update(elapsed);
+	}
+
+	function handleMovement()
+	{
 		acceleration.x = 0;
 
 		if (FlxG.keys.anyPressed([LEFT, A]))
@@ -60,13 +70,14 @@ class Player extends FlxSprite
 		{
 			velocity.y = -jumpPower;
 		}
+	}
 
+	function handleSound()
+	{
 		if (justTouched(FlxObject.FLOOR))
 		{
 			splatSound.play();
 		}
-
-		super.update(elapsed);
 	}
 
 	function handleAnimation()
