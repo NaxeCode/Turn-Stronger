@@ -66,39 +66,14 @@ class Tutorial extends FlxState
 			trace(di);
 		}
 
-		dialogueBox = new DialogueBox();
-		add(dialogueBox);
-
-		gameCamera = new FlxCamera(0, 0, FlxG.width, FlxG.height);
-		uiCamera = new FlxCamera(0, 0, FlxG.width, FlxG.height);
-
-		gameCamera.bgColor = 0xFF17142d;
-		uiCamera.bgColor = FlxColor.TRANSPARENT;
+		initDialogueBox();
+		initCameras();
 
 		player = new Player(0, 0);
 
-		npcs = new FlxTypedGroup<NPC>();
-
-		noah = new NPC(0, 0);
-		noah.text = "suh dude, new and improved noah here.";
-		noah.loadGraphic(AssetPaths.Noah__png, false, 32, 64);
-		noah.setFacingFlip(FlxObject.LEFT, true, false);
-		noah.setFacingFlip(FlxObject.RIGHT, false, false);
-
-		oldnoah = new NPC(0, 0);
-		oldnoah.text = "Hey! This is noah's old graphic";
-		oldnoah.loadGraphic(AssetPaths.Noah_no_glass__png, false, 32, 64);
-		oldnoah.setFacingFlip(FlxObject.LEFT, true, false);
-		oldnoah.setFacingFlip(FlxObject.RIGHT, false, false);
-
 		level = new TiledLevel("assets/tiled/tutorial.tmx", this);
 
-		npcs.add(noah);
-		npcs.add(oldnoah);
-		add(noah);
-		add(oldnoah);
-
-		noah.facing = FlxObject.LEFT;
+		initNPCS();
 
 		add(level.backgroundLayer);
 
@@ -121,22 +96,54 @@ class Tutorial extends FlxState
 		dialogueBox.scrollFactor.set(0, 0);
 	}
 
+	function initDialogueBox()
+	{
+		dialogueBox = new DialogueBox();
+		add(dialogueBox);
+	}
+
+	function initCameras()
+	{
+		gameCamera = new FlxCamera(0, 0, FlxG.width, FlxG.height);
+		uiCamera = new FlxCamera(0, 0, FlxG.width, FlxG.height);
+
+		gameCamera.bgColor = 0xFF17142d;
+		uiCamera.bgColor = FlxColor.TRANSPARENT;
+	}
+
+	function initNPCS()
+	{
+		npcs = new FlxTypedGroup<NPC>();
+
+		noah = new NPC(0, 0);
+		noah.text = "suh dude, new and improved noah here.";
+		noah.loadGraphic(AssetPaths.Noah__png, false, 32, 64);
+		noah.setFacingFlip(FlxObject.LEFT, true, false);
+		noah.setFacingFlip(FlxObject.RIGHT, false, false);
+
+		oldnoah = new NPC(0, 0);
+		oldnoah.text = "Hey! This is noah's old graphic";
+		oldnoah.loadGraphic(AssetPaths.Noah_no_glass__png, false, 32, 64);
+		oldnoah.setFacingFlip(FlxObject.LEFT, true, false);
+		oldnoah.setFacingFlip(FlxObject.RIGHT, false, false);
+
+		npcs.add(noah);
+		npcs.add(oldnoah);
+		add(noah);
+		add(oldnoah);
+
+		noah.facing = FlxObject.LEFT;
+	}
+
 	override public function update(elapsed:Float)
 	{
-		if (FlxG.keys.justPressed.F)
-			FlxG.fullscreen = !FlxG.fullscreen;
+		handleFullScreen();
 
 		handleDialogBox();
 
 		super.update(elapsed);
 
-		level.collideWithLevel(player);
-
-		if (FlxG.overlap(player, floor))
-		{
-			youDied = true;
-			FlxG.resetState();
-		}
+		handleLevel();
 	}
 
 	function handleDialogBox()
@@ -171,11 +178,28 @@ class Tutorial extends FlxState
 		}
 	}
 
+	function handleLevel()
+	{
+		level.collideWithLevel(player);
+
+		if (FlxG.overlap(player, floor))
+		{
+			youDied = true;
+			FlxG.resetState();
+		}
+	}
+
 	function handleEnemy(plr:FlxSprite, enm:FlxSprite)
 	{
 		if (enm.justTouched(FlxObject.CEILING) && plr.justTouched(FlxObject.FLOOR))
 			plr.velocity.y = -plr.maxVelocity.y / 2;
 		else
 			plr.kill();
+	}
+
+	function handleFullScreen()
+	{
+		if (FlxG.keys.justPressed.F)
+			FlxG.fullscreen = !FlxG.fullscreen;
 	}
 }
