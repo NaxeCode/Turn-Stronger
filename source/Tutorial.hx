@@ -86,7 +86,7 @@ class Tutorial extends FlxState
 		add(level.foregroundTiles);
 
 		gameCamera.follow(player);
-		gameCamera.zoom = 1;
+		gameCamera.zoom = 2;
 
 		FlxG.cameras.reset(gameCamera);
 		FlxG.cameras.add(uiCamera);
