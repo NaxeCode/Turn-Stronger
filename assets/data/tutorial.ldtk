@@ -14,7 +14,7 @@
 	"defaultGridSize": 16,
 	"bgColor": "#676877",
 	"defaultLevelBgColor": "#7F8093",
-	"nextUid": 13,
+	"nextUid": 14,
 	"minifyJson": false,
 	"externalLevels": false,
 	"exportTiled": false,
@@ -119,8 +119,8 @@
 			{
 				"identifier": "Noah",
 				"uid": 7,
-				"width": 16,
-				"height": 16,
+				"width": 32,
+				"height": 64,
 				"color": "#EC3737",
 				"renderMode": "Rectangle",
 				"showName": true,
@@ -133,22 +133,25 @@
 				"pivotY": 0,
 				"fieldDefs": [
 					{
-						"identifier": "point",
-						"__type": "Point",
-						"uid": 11,
-						"type": "F_Point",
+						"identifier": "string",
+						"__type": "String",
+						"uid": 13,
+						"type": "F_String",
 						"isArray": false,
 						"canBeNull": true,
 						"arrayMinLength": null,
 						"arrayMaxLength": null,
-						"editorDisplayMode": "Hidden",
+						"editorDisplayMode": "NameAndValue",
 						"editorDisplayPos": "Above",
-						"editorAlwaysShow": false,
+						"editorAlwaysShow": true,
 						"min": null,
 						"max": null,
 						"regex": null,
 						"acceptFileTypes": null,
-						"defaultOverride": null
+						"defaultOverride": {
+							"id": "V_String",
+							"params": ["cmn let me talk"]
+						}
 					}
 				]
 			},
@@ -340,14 +343,14 @@
 								"params": ["9,14"]
 							}]
 						}] },
-						{ "__identifier": "Noah", "__grid": [14,14], "__pivot": [0,0], "__tile": null, "defUid": 7, "px": [224,224], "fieldInstances": [{
-							"__identifier": "point",
-							"__value": { "cx": 14, "cy": 14 },
-							"__type": "Point",
-							"defUid": 11,
+						{ "__identifier": "Noah", "__grid": [14,11], "__pivot": [0,0], "__tile": null, "defUid": 7, "px": [224,176], "fieldInstances": [{
+							"__identifier": "string",
+							"__value": "suh dude, can't a guy float in peace?",
+							"__type": "String",
+							"defUid": 13,
 							"realEditorValues": [{
 								"id": "V_String",
-								"params": ["14,14"]
+								"params": ["suh dude, can't a guy float in peace?"]
 							}]
 						}] },
 						{ "__identifier": "Old_Noah", "__grid": [20,14], "__pivot": [0,0], "__tile": null, "defUid": 8, "px": [320,224], "fieldInstances": [{
