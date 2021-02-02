@@ -104,6 +104,8 @@ class BetterTutorial extends FlxState
 		noah = new NPC(x, y);
 		noah.text = entityLayer.all_Noah[0].f_string;
 		noah.loadGraphic(AssetPaths.Noah__png, false, 32, 64);
+		trace(noah.width);
+		trace(noah.height);
 		noah.setFacingFlip(FlxObject.LEFT, true, false);
 		noah.setFacingFlip(FlxObject.RIGHT, false, false);
 
@@ -149,7 +151,7 @@ class BetterTutorial extends FlxState
 			{
 				for (member in npcs)
 				{
-					if (FlxMath.isDistanceWithin(member, player, 75))
+					if (FlxMath.isDistanceWithin(member, player, 50))
 					{
 						dialogueBox.say(member.text);
 						FlxTween.tween(gameCamera, {zoom: 4}, 0.5, {ease: FlxEase.backOut});
