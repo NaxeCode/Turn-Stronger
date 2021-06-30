@@ -81,10 +81,12 @@ class BetterTutorial extends FlxState
 		gameCamera.follow(player);
 		gameCamera.zoom = 2;
 
-		FlxG.cameras.reset(gameCamera);
-		FlxG.cameras.add(uiCamera);
+		// FlxG.cameras.reset(gameCamera);
 
-		FlxCamera.defaultCameras = [gameCamera];
+		FlxG.cameras.add(gameCamera);
+		FlxG.cameras.add(uiCamera, false);
+
+		gameCamera.cameras = [uiCamera];
 		// gameCamera.camera.setScrollBoundsRect(0, 0, background.width, background.height, true);
 		dialogueBox.cameras = [uiCamera];
 
