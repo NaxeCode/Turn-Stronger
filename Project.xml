@@ -42,6 +42,8 @@
 	
 	<haxelib name="ldtk-haxe-api" />
 
+	<haxelib name="deepnightLibs" />
+
 	<!--In case you want to use the ui package-->
 	<!--<haxelib name="flixel-ui" />-->
 
