@@ -56,7 +56,6 @@ class Player extends FlxSprite
 		if (!Reg.canMove)
 			return;
 
-		#if desktop
 		if (FlxG.keys.anyPressed([LEFT, A]))
 		{
 			acceleration.x = -maxVelocity.x * 4;
@@ -73,7 +72,6 @@ class Player extends FlxSprite
 		{
 			velocity.y = -jumpPower;
 		}
-		#end
 	}
 
 	function handleSound()
