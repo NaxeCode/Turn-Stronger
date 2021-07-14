@@ -134,6 +134,7 @@ class BetterTutorial extends FlxState
 
 	function handleDialogBox()
 	{
+		#if desktop
 		if (FlxG.keys.justPressed.Z)
 		{
 			if (dialogueBox.visible)
@@ -161,5 +162,6 @@ class BetterTutorial extends FlxState
 				}
 			}
 		}
+		#end
 	}
 }
