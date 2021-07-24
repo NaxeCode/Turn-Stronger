@@ -11,8 +11,7 @@ import flixel.util.FlxColor;
 
 class PlayState extends FlxState
 {
-	public var level:TiledLevel;
-
+	// public var level:TiledLevel;
 	public var player:Player;
 	public var enemy:FlxGroup;
 
