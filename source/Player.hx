@@ -19,14 +19,14 @@ class Player extends FlxSprite
 		splatSound = FlxG.sound.load(AssetPaths.splat__ogg, 1);
 
 		// makeGraphic(16, 16, FlxColor.fromInt(0xFF273769));
-		loadGraphic(AssetPaths.player_no_glass__png, true, 32, 32);
+		loadGraphic(AssetPaths.true_limited__png, false, 29, 32);
 
 		setFacingFlip(FlxObject.LEFT, true, false);
 		setFacingFlip(FlxObject.RIGHT, false, false);
 
-		animation.add("idle", [0, 1, 2, 3], 10, true);
-		animation.add("run", [4, 5, 6, 7, 8], 10, true);
-		animation.add("jump", [9, 10, 11], 30, true);
+		// animation.add("idle", [0, 1, 2, 3], 10, true);
+		// animation.add("run", [4, 5, 6, 7, 8], 10, true);
+		// animation.add("jump", [9, 10, 11], 30, true);
 
 		width = 13;
 		height = 13;
@@ -40,7 +40,7 @@ class Player extends FlxSprite
 
 	override function update(elapsed:Float)
 	{
-		handleAnimation();
+		// handleAnimation();
 
 		handleMovement();
 
@@ -56,7 +56,7 @@ class Player extends FlxSprite
 		if (!Reg.canMove)
 			return;
 
-		#if desktop
+		#if (desktop || web)
 		if (FlxG.keys.anyPressed([LEFT, A]))
 		{
 			acceleration.x = -maxVelocity.x * 4;
