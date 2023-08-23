@@ -3,7 +3,7 @@ package;
 import flixel.FlxG;
 import flixel.FlxObject;
 import flixel.FlxSprite;
-import flixel.system.FlxSound;
+import flixel.sound.FlxSound;
 import flixel.util.FlxColor;
 
 class Player extends FlxSprite
@@ -21,8 +21,8 @@ class Player extends FlxSprite
 		// makeGraphic(16, 16, FlxColor.fromInt(0xFF273769));
 		loadGraphic(AssetPaths.player_no_glass__png, true, 32, 32);
 
-		setFacingFlip(FlxObject.LEFT, true, false);
-		setFacingFlip(FlxObject.RIGHT, false, false);
+		setFacingFlip(LEFT, true, false);
+		setFacingFlip(RIGHT, false, false);
 
 		animation.add("idle", [0, 1, 2, 3], 10, true);
 		animation.add("run", [4, 5, 6, 7, 8], 10, true);
@@ -59,16 +59,16 @@ class Player extends FlxSprite
 		if (FlxG.keys.anyPressed([LEFT, A]))
 		{
 			acceleration.x = -maxVelocity.x * 4;
-			facing = FlxObject.LEFT;
+			facing = LEFT;
 		}
 
 		if (FlxG.keys.anyPressed([RIGHT, D]))
 		{
 			acceleration.x = maxVelocity.x * 4;
-			facing = FlxObject.RIGHT;
+			facing = RIGHT;
 		}
 
-		if (FlxG.keys.anyJustPressed([SPACE, UP, W]) && isTouching(FlxObject.FLOOR))
+		if (FlxG.keys.anyJustPressed([SPACE, UP, W]) && isTouching(FLOOR))
 		{
 			velocity.y = -jumpPower;
 		}
@@ -76,7 +76,7 @@ class Player extends FlxSprite
 
 	function handleSound()
 	{
-		if (justTouched(FlxObject.FLOOR))
+		if (justTouched(FLOOR))
 		{
 			splatSound.play();
 		}
@@ -88,11 +88,11 @@ class Player extends FlxSprite
 		{
 			animation.play("jump");
 		}
-		else if (this.isTouching(FlxObject.FLOOR) && velocity.x != 0)
+		else if (this.isTouching(FLOOR) && velocity.x != 0)
 		{
 			animation.play("run");
 		}
-		else if (this.isTouching(FlxObject.FLOOR) && velocity.x == 0 && velocity.y == 0)
+		else if (this.isTouching(FLOOR) && velocity.x == 0 && velocity.y == 0)
 		{
 			animation.play("idle");
 		}

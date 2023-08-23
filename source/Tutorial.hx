@@ -119,21 +119,21 @@ class Tutorial extends FlxState
 		noah = new NPC(0, 0);
 		noah.text = "suh dude, can't a guy float in peace?";
 		noah.loadGraphic(AssetPaths.Noah__png, false, 32, 64);
-		noah.setFacingFlip(FlxObject.LEFT, true, false);
-		noah.setFacingFlip(FlxObject.RIGHT, false, false);
+		noah.setFacingFlip(LEFT, true, false);
+		noah.setFacingFlip(RIGHT, false, false);
 
 		oldnoah = new NPC(0, 0);
 		oldnoah.text = "Hey! This is noah's old graphic";
 		oldnoah.loadGraphic(AssetPaths.Noah_no_glass__png, false, 32, 64);
-		oldnoah.setFacingFlip(FlxObject.LEFT, true, false);
-		oldnoah.setFacingFlip(FlxObject.RIGHT, false, false);
+		oldnoah.setFacingFlip(LEFT, true, false);
+		oldnoah.setFacingFlip(RIGHT, false, false);
 
 		npcs.add(noah);
 		npcs.add(oldnoah);
 		add(noah);
 		add(oldnoah);
 
-		noah.facing = FlxObject.LEFT;
+		noah.facing = LEFT;
 	}
 
 	override public function update(elapsed:Float)
@@ -191,7 +191,7 @@ class Tutorial extends FlxState
 
 	function handleEnemy(plr:FlxSprite, enm:FlxSprite)
 	{
-		if (enm.justTouched(FlxObject.CEILING) && plr.justTouched(FlxObject.FLOOR))
+		if (enm.justTouched(CEILING) && plr.justTouched(FLOOR))
 			plr.velocity.y = -plr.maxVelocity.y / 2;
 		else
 			plr.kill();

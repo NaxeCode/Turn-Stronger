@@ -108,13 +108,13 @@ class BetterTutorial extends FlxState
 		noah.loadGraphic(AssetPaths.Noah__png, false, 32, 64);
 		trace(noah.width);
 		trace(noah.height);
-		noah.setFacingFlip(FlxObject.LEFT, true, false);
-		noah.setFacingFlip(FlxObject.RIGHT, false, false);
+		noah.setFacingFlip(LEFT, true, false);
+		noah.setFacingFlip(LEFT, false, false);
 
 		npcs.add(noah);
 		add(noah);
 
-		noah.facing = FlxObject.LEFT;
+		noah.facing = LEFT;
 
 		x = entityLayer.all_Player[0].pixelX;
 		y = entityLayer.all_Player[0].pixelY;
