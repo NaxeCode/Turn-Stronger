@@ -88,10 +88,10 @@ class Tutorial extends FlxState
 		gameCamera.zoom = 2;
 
 		FlxG.cameras.reset(gameCamera);
-		FlxG.cameras.add(uiCamera);
+		FlxG.cameras.add(uiCamera, false);
 
-		FlxCamera.defaultCameras = [gameCamera];
-		gameCamera.camera.setScrollBoundsRect(0, 0, level.fullWidth, level.fullHeight, true);
+		// FlxCamera.defaultCameras = [gameCamera];
+		// gameCamera.camera.setScrollBoundsRect(0, 0, level.fullWidth, level.fullHeight, true);
 		dialogueBox.cameras = [uiCamera];
 
 		dialogueBox.scrollFactor.set(0, 0);
