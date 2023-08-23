@@ -53,7 +53,7 @@ class BetterTutorial extends FlxState
 		add(background);
 
 		// Iterate all world levels
-		for (level in project.levels)
+		for (level in project.all_worlds.Default.levels)
 		{
 			// Place it using level world coordinates (in pixels)
 			collider.setPosition(level.worldX, level.worldY);
@@ -83,10 +83,10 @@ class BetterTutorial extends FlxState
 
 		// FlxG.cameras.reset(gameCamera);
 
-		FlxG.cameras.add(gameCamera);
+		FlxG.cameras.add(gameCamera, true);
 		FlxG.cameras.add(uiCamera, false);
 
-		gameCamera.cameras = [uiCamera];
+		// gameCamera = uiCamera;
 		// gameCamera.camera.setScrollBoundsRect(0, 0, background.width, background.height, true);
 		dialogueBox.cameras = [uiCamera];
 
