@@ -1,10 +1,12 @@
-package;
+package entities;
 
 import flixel.FlxG;
 import flixel.FlxObject;
 import flixel.FlxSprite;
 import flixel.sound.FlxSound;
 import flixel.util.FlxColor;
+import utils.assets.AssetPaths;
+import utils.dialog.Reg;
 
 class Player extends FlxSprite
 {

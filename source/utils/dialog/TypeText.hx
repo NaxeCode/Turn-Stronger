@@ -1,4 +1,4 @@
-package;
+package utils.dialog;
 
 import flash.media.Sound;
 import flixel.FlxG;

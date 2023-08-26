@@ -1,5 +1,7 @@
-package;
+package levels;
 
+import entities.NPC;
+import entities.Player;
 import flixel.FlxCamera;
 import flixel.FlxG;
 import flixel.FlxObject;
@@ -12,6 +14,9 @@ import flixel.math.FlxMath;
 import flixel.tweens.FlxEase;
 import flixel.tweens.FlxTween;
 import flixel.util.FlxColor;
+import utils.assets.AssetPaths;
+import utils.dialog.DialogueBox;
+import utils.dialog.Reg;
 
 class BetterTutorial extends FlxState
 {
