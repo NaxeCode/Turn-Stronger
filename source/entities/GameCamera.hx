@@ -24,9 +24,6 @@ class GameCamera extends FlxCamera
 	private var active_follow:Bool = false;
 	private var active_player:Bool = true;
 
-	// Timer for playerStill
-	var playerStill:FlxTimer;
-
 	public function new(X:Int = 0, Y:Int = 0, Width:Int = 0, Height:Int = 0, Zoom:Float = 0)
 	{
 		super(X, Y, Width, Height, Zoom);
@@ -143,14 +140,45 @@ class Conditions
 	}
 }
 
+// Also the zooming class lol
 class Idle extends FlxFSMState<GameCamera>
 {
+	private var frameCount:Float = 0;
+	private var TOTAL_FRAME:Int = 1200; // 30 Second tween
+
 	override function enter(owner:GameCamera, fsm:FlxFSM<GameCamera>):Void
 	{
-		// owner.animation.play("standing");
+		// playerStill = new FlxTimer().start(30, );
 	}
 
-	override function update(elapsed:Float, owner:GameCamera, fsm:FlxFSM<GameCamera>):Void {}
+	override function update(elapsed:Float, owner:GameCamera, fsm:FlxFSM<GameCamera>):Void
+	{
+		spacingOut(owner);
+	}
+
+	function spacingOut(owner:GameCamera)
+	{
+		var rate = frameCount / TOTAL_FRAME;
+
+		// An animation when rate is 0 to 1.
+		if (rate <= 1)
+		{
+			var zoomRate = rate.circInOut().lerp(owner.zoom, 1);
+			// var yRate = rate.circInOut().lerp(owner.scroll.y, owner.realTarget.y - 25);
+			owner.zoom = zoomRate;
+			// owner.scroll.y = yRate;
+			frameCount += 1;
+		}
+		else
+		{
+			// frameCount = 0;
+		}
+	}
+
+	override function exit(owner:GameCamera)
+	{
+		frameCount = 0;
+	}
 }
 
 class Follow extends FlxFSMState<GameCamera>
