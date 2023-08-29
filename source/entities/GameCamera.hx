@@ -26,11 +26,12 @@ class GameCamera extends FlxCamera
 
 		bgColor = 0xFF17142d;
 		antialiasing = false;
+
 		FlxG.watch.add(this, "active_follow", "active_follow");
 		FlxG.watch.add(this, "active_player", "active_player");
+
 		FlxG.watch.add(scroll, "x", "scroll X");
 		FlxG.watch.add(scroll, "y", "scroll Y");
-		// follow(player, NO_DEAD_ZONE, 5);
 	}
 
 	public function initPlayer(passThruPlayerObj:Player)
@@ -43,8 +44,6 @@ class GameCamera extends FlxCamera
 		}
 		else
 			trace("arg player null");
-
-		// follow(player, NO_DEAD_ZONE, 5);
 	}
 
 	override function update(elapsed:Float)
