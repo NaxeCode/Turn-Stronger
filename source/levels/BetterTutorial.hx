@@ -142,13 +142,6 @@ class BetterTutorial extends FlxState
 
 	override public function update(elapsed:Float)
 	{
-		if (FlxG.keys.justPressed.U)
-		{
-			// "scroll.x": 2
-			FlxTween.tween(gameCamera, {x: 300}, 3);
-			FlxTween.tween(uiCamera, {x: 300}, 3);
-			FlxTween.tween(FlxG.camera, {x: 300}, 3);
-		}
 		handleDialogBox();
 
 		if (activateCamera)
@@ -161,27 +154,8 @@ class BetterTutorial extends FlxState
 
 	function watchForFlip():Void
 	{
-		var moveTo = 0;
-		var factor = 50;
-
-		// trace("Before Adjustment flipX = " + player.flipX);
-
-		switch (player.flipX)
-		{
-			case true:
-				moveTo = factor;
-				bounce("LEFT");
-			case false:
-				moveTo = -factor;
-				bounce("RIGHT");
-		}
-
-		// gameCamera.focusOn(new FlxPoint(player.x += moveTo, player.y));
-
-		// trace("After Adjustment flipX = " + player.flipX);
-
-		var somePoint:FlxPoint = new FlxPoint(player.getScreenPosition().x - moveTo, gameCamera.scroll.y);
-		// FlxTween.tween(gameCamera, {scroll: somePoint}, 3, {ease: FlxEase.backOut});
+		var dir = player.flipX ? "LEFT" : "RIGHT";
+		bounce(dir);
 	}
 
 	function bounce(dir:String)
