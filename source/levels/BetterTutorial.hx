@@ -62,7 +62,7 @@ class BetterTutorial extends FlxState
 
 		buildWorld();
 
-		gameCamera.follow(player, NO_DEAD_ZONE, 5);
+		gameCamera.initPlayer(player);
 		// var w:Float = (gameCamera.width / 4);
 		// var h:Float = (gameCamera.height / 3);
 		// gameCamera.deadzone = FlxRect.get((gameCamera.width - w) / 2, (gameCamera.height - h) / 2 - h * 0.25, w, h);
@@ -138,16 +138,21 @@ class BetterTutorial extends FlxState
 		add(player);
 	}
 
-	var activateCamera:Bool = false;
-
 	override public function update(elapsed:Float)
 	{
 		handleDialogBox();
 
-		if (activateCamera)
-			watchForFlip();
+		// if (activateCamera)
+		// watchForFlip();
 
 		super.update(elapsed);
+
+		if (FlxG.keys.justPressed.H)
+		{
+			// gameCamera.target = null;
+			// gameCamera.scroll.x += 100;
+			// gameCamera.target = player;
+		}
 
 		FlxG.collide(collider, player);
 	}
@@ -170,19 +175,6 @@ class BetterTutorial extends FlxState
 	function callCameraTween(movementAmount:Int)
 	{
 		gameCamera.target = null;
-		var rate = frameCount / TOTAL_FRAME;
-
-		// An animation when rate is 0 to 1.
-		if (rate <= 1)
-		{
-			// Move x from 0 to 450 according to the value of rate.
-			// square.x = rate.quintOut().lerp(0, 450);
-			var realX = (gameCamera.scroll.x - player.x);
-			var realY = (gameCamera.scroll.y + player.y);
-			gameCamera.scroll.x = rate.quintOut().lerp(player.x, player.x);
-			gameCamera.scroll.y = rate.quintOut().lerp(player.y, player.y);
-		}
-		frameCount++;
 		// FlxTween.tween(gameCamera, {"scroll.x": movementAmount}, 1, {ease: FlxEase.elasticInOut, onComplete: followPlayer});
 	}
 

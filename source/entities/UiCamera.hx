@@ -20,13 +20,6 @@ class UiCamera extends FlxCamera
 
 	override function update(elapsed:Float)
 	{
-		if (FlxG.keys.justPressed.Y)
-		{
-			for (element in ui_element)
-			{
-				$type(element);
-			}
-		}
 		super.update(elapsed);
 	}
 }

@@ -5,8 +5,8 @@ import flixel.FlxG;
 import flixel.input.keyboard.FlxKey;
 import flixel.math.FlxMath;
 import flixel.math.FlxRandom;
+import flixel.sound.FlxSound;
 import flixel.system.FlxAssets;
-import flixel.system.FlxSound;
 import flixel.text.FlxText;
 
 #if !flash
