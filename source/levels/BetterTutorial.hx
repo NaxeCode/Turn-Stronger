@@ -160,22 +160,23 @@ class BetterTutorial extends FlxState
 
 	function bounce(dir:String)
 	{
-		var movementAmount = 100;
+		var movementAmount = 15;
 		if (dir == "LEFT")
 			movementAmount = -movementAmount;
 
-		gameCamera.target = null;
 		callCameraTween(movementAmount);
 	}
 
 	function callCameraTween(movementAmount:Int)
 	{
+		gameCamera.target = null;
 		FlxTween.tween(gameCamera, {"scroll.x": movementAmount}, 1, {ease: FlxEase.elasticInOut, onComplete: followPlayer});
 	}
 
 	function followPlayer(tween:FlxTween):Void
 	{
-		gameCamera.follow(player);
+		// gameCamera.focusOn(new FlxPoint(player.x, player.y));
+		// gameCamera.follow(player);
 	}
 
 	function handleDialogBox()
