@@ -1,7 +1,9 @@
 package levels;
 
+import entities.GameCamera;
 import entities.NPC;
 import entities.Player;
+import entities.UiCamera;
 import flixel.FlxCamera;
 import flixel.FlxG;
 import flixel.FlxObject;
@@ -20,8 +22,14 @@ import utils.assets.AssetPaths;
 import utils.dialog.DialogueBox;
 import utils.dialog.Reg;
 
+using tweenxcore.Tools;
+
 class BetterTutorial extends FlxState
 {
+	private var frameCount = 0;
+
+	public static var TOTAL_FRAME:Int = 120;
+
 	public var player:Player;
 
 	var collider:FlxSpriteGroup;
@@ -32,25 +40,39 @@ class BetterTutorial extends FlxState
 
 	public var dialogueBox:DialogueBox;
 
-	public static var gameCamera:FlxCamera;
+	public static var gameCamera:GameCamera;
 
-	var uiCamera:FlxCamera;
+	var uiCamera:UiCamera;
 
 	override public function create()
 	{
 		super.create();
 
-		FlxG.camera.flash(FlxColor.BLACK, 4);
-
 		dialogueBox = new DialogueBox();
 		add(dialogueBox);
 
-		gameCamera = new FlxCamera(0, 0, FlxG.width, FlxG.height);
-		uiCamera = new FlxCamera(0, 0, FlxG.width, FlxG.height);
+		FlxG.camera.flash(FlxColor.BLACK, 4);
+		gameCamera = new GameCamera(0, 0, FlxG.width, FlxG.height, 1.25);
+		uiCamera = new UiCamera(0, 0, FlxG.width, FlxG.height);
 
-		gameCamera.bgColor = 0xFF17142d;
-		uiCamera.bgColor = FlxColor.TRANSPARENT;
+		dialogueBox.cameras = [uiCamera];
+		uiCamera.ui_element.push(dialogueBox);
+		trace(uiCamera.ui_element);
+		dialogueBox.scrollFactor.set(0, 0);
 
+		buildWorld();
+
+		gameCamera.follow(player, NO_DEAD_ZONE, 5);
+		// var w:Float = (gameCamera.width / 4);
+		// var h:Float = (gameCamera.height / 3);
+		// gameCamera.deadzone = FlxRect.get((gameCamera.width - w) / 2, (gameCamera.height - h) / 2 - h * 0.25, w, h);
+
+		FlxG.cameras.add(gameCamera, true);
+		FlxG.cameras.add(uiCamera, false);
+	}
+
+	function buildWorld()
+	{
 		var project = new LdtkProject();
 
 		// Create a FlxGroup for all level layers
@@ -84,28 +106,6 @@ class BetterTutorial extends FlxState
 			tile.immovable = true;
 		}
 		add(collider);
-
-		gameCamera.follow(player, NO_DEAD_ZONE, 5);
-		// var w:Float = (gameCamera.width / 4);
-		// var h:Float = (gameCamera.height / 3);
-		// gameCamera.deadzone = FlxRect.get((gameCamera.width - w) / 2, (gameCamera.height - h) / 2 - h * 0.25, w, h);
-		gameCamera.zoom = 1.25;
-
-		// FlxG.cameras.reset(gameCamera);
-
-		FlxG.cameras.add(gameCamera, true);
-		FlxG.cameras.add(uiCamera, false);
-
-		// gameCamera = uiCamera;
-		// gameCamera.camera.setScrollBoundsRect(0, 0, background.width, background.height, true);
-		dialogueBox.cameras = [uiCamera];
-
-		dialogueBox.scrollFactor.set(0, 0);
-
-		// trace("Activate Camera True!");
-		activateCamera = true;
-
-		// trace("Activate Camera = " + activateCamera);
 	}
 
 	function createEntities(entityLayer:LdtkProject.Layer_Entities)
@@ -170,7 +170,20 @@ class BetterTutorial extends FlxState
 	function callCameraTween(movementAmount:Int)
 	{
 		gameCamera.target = null;
-		FlxTween.tween(gameCamera, {"scroll.x": movementAmount}, 1, {ease: FlxEase.elasticInOut, onComplete: followPlayer});
+		var rate = frameCount / TOTAL_FRAME;
+
+		// An animation when rate is 0 to 1.
+		if (rate <= 1)
+		{
+			// Move x from 0 to 450 according to the value of rate.
+			// square.x = rate.quintOut().lerp(0, 450);
+			var realX = (gameCamera.scroll.x - player.x);
+			var realY = (gameCamera.scroll.y + player.y);
+			gameCamera.scroll.x = rate.quintOut().lerp(player.x, player.x);
+			gameCamera.scroll.y = rate.quintOut().lerp(player.y, player.y);
+		}
+		frameCount++;
+		// FlxTween.tween(gameCamera, {"scroll.x": movementAmount}, 1, {ease: FlxEase.elasticInOut, onComplete: followPlayer});
 	}
 
 	function followPlayer(tween:FlxTween):Void
