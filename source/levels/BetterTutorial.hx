@@ -11,6 +11,8 @@ import flixel.FlxState;
 import flixel.group.FlxGroup.FlxTypedGroup;
 import flixel.group.FlxSpriteGroup;
 import flixel.math.FlxMath;
+import flixel.math.FlxPoint;
+import flixel.math.FlxRect;
 import flixel.tweens.FlxEase;
 import flixel.tweens.FlxTween;
 import flixel.util.FlxColor;
@@ -83,8 +85,11 @@ class BetterTutorial extends FlxState
 		}
 		add(collider);
 
-		gameCamera.follow(player);
-		gameCamera.zoom = 2;
+		gameCamera.follow(player, NO_DEAD_ZONE, 5);
+		// var w:Float = (gameCamera.width / 4);
+		// var h:Float = (gameCamera.height / 3);
+		// gameCamera.deadzone = FlxRect.get((gameCamera.width - w) / 2, (gameCamera.height - h) / 2 - h * 0.25, w, h);
+		gameCamera.zoom = 1.25;
 
 		// FlxG.cameras.reset(gameCamera);
 
@@ -96,6 +101,11 @@ class BetterTutorial extends FlxState
 		dialogueBox.cameras = [uiCamera];
 
 		dialogueBox.scrollFactor.set(0, 0);
+
+		// trace("Activate Camera True!");
+		activateCamera = true;
+
+		// trace("Activate Camera = " + activateCamera);
 	}
 
 	function createEntities(entityLayer:LdtkProject.Layer_Entities)
@@ -111,13 +121,13 @@ class BetterTutorial extends FlxState
 		noah = new NPC(x, y);
 		noah.text = entityLayer.all_Noah[0].f_string;
 		noah.loadGraphic(AssetPaths.Noah__png, false, 32, 64);
-		trace(noah.width);
-		trace(noah.height);
+		// trace(noah.width);
+		// trace(noah.height);
 		noah.setFacingFlip(LEFT, true, false);
 		noah.setFacingFlip(LEFT, false, false);
 
-		npcs.add(noah);
-		add(noah);
+		// npcs.add(noah);
+		// add(noah);
 
 		noah.facing = LEFT;
 
@@ -128,13 +138,70 @@ class BetterTutorial extends FlxState
 		add(player);
 	}
 
+	var activateCamera:Bool = false;
+
 	override public function update(elapsed:Float)
 	{
+		if (FlxG.keys.justPressed.U)
+		{
+			// "scroll.x": 2
+			FlxTween.tween(gameCamera, {x: 300}, 3);
+			FlxTween.tween(uiCamera, {x: 300}, 3);
+			FlxTween.tween(FlxG.camera, {x: 300}, 3);
+		}
 		handleDialogBox();
+
+		if (activateCamera)
+			watchForFlip();
 
 		super.update(elapsed);
 
 		FlxG.collide(collider, player);
+	}
+
+	function watchForFlip():Void
+	{
+		var moveTo = 0;
+		var factor = 50;
+
+		// trace("Before Adjustment flipX = " + player.flipX);
+
+		switch (player.flipX)
+		{
+			case true:
+				moveTo = factor;
+				bounce("LEFT");
+			case false:
+				moveTo = -factor;
+				bounce("RIGHT");
+		}
+
+		// gameCamera.focusOn(new FlxPoint(player.x += moveTo, player.y));
+
+		// trace("After Adjustment flipX = " + player.flipX);
+
+		var somePoint:FlxPoint = new FlxPoint(player.getScreenPosition().x - moveTo, gameCamera.scroll.y);
+		// FlxTween.tween(gameCamera, {scroll: somePoint}, 3, {ease: FlxEase.backOut});
+	}
+
+	function bounce(dir:String)
+	{
+		var movementAmount = 100;
+		if (dir == "LEFT")
+			movementAmount = -movementAmount;
+
+		gameCamera.target = null;
+		callCameraTween(movementAmount);
+	}
+
+	function callCameraTween(movementAmount:Int)
+	{
+		FlxTween.tween(gameCamera, {"scroll.x": movementAmount}, 1, {ease: FlxEase.elasticInOut, onComplete: followPlayer});
+	}
+
+	function followPlayer(tween:FlxTween):Void
+	{
+		gameCamera.follow(player);
 	}
 
 	function handleDialogBox()
