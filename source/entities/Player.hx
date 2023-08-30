@@ -17,14 +17,14 @@ class Player extends FlxSprite
 
 	var splatSound:FlxSound;
 
-	static var actions:FlxActionManager;
+	public static var actions:FlxActionManager;
 
-	var up:FlxActionDigital;
-	var down:FlxActionDigital;
-	var left:FlxActionDigital;
-	var right:FlxActionDigital;
+	public var up:FlxActionDigital;
+	public var down:FlxActionDigital;
+	public var left:FlxActionDigital;
+	public var right:FlxActionDigital;
 
-	var jump:FlxActionDigital;
+	public var jump:FlxActionDigital;
 
 	// var moveAnalog:FlxActionAnalog;
 	var trigger1:FlxActionAnalog;
