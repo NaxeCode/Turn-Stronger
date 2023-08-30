@@ -171,10 +171,6 @@ class Idle extends FlxFSMState<GameCamera>
 			// owner.scroll.y = yRate;
 			frameCount += 1;
 		}
-		else
-		{
-			// frameCount = 0;
-		}
 	}
 
 	override function exit(owner:GameCamera)
@@ -214,5 +210,10 @@ class Follow extends FlxFSMState<GameCamera>
 		{
 			frameCount = 0;
 		}
+	}
+
+	override function exit(owner:GameCamera)
+	{
+		frameCount = 0;
 	}
 }
