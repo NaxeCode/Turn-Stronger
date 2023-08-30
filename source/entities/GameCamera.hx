@@ -46,7 +46,16 @@ class GameCamera extends FlxCamera
 	{
 		fsm = new FlxFSM(this);
 		fsm.transitions.add(Idle, Follow, Conditions.follow);
+		fsm.transitions.add(Idle, LookingDown, Conditions.holdingDown);
+		fsm.transitions.add(Idle, LookingUp, Conditions.holdingUp);
+
 		fsm.transitions.add(Follow, Idle, Conditions.stopped);
+		fsm.transitions.add(Follow, LookingDown, Conditions.holdingDown);
+		fsm.transitions.add(Follow, LookingUp, Conditions.holdingUp);
+
+		fsm.transitions.add(LookingDown, Idle, Conditions.releaseLookingDown);
+		fsm.transitions.add(LookingUp, Idle, Conditions.releaseLookingUp);
+		// fsm.transitions.add(LookingDown, Follow, Conditions.follow);
 		fsm.transitions.start(Idle);
 	}
 
@@ -140,6 +149,26 @@ class Conditions
 	{
 		return !(Owner.scroll.x != Owner.player.x - (Owner.width / 2.5) || Owner.scroll.y != Owner.player.y - (Owner.height / 2.5));
 	}
+
+	public static function holdingDown(Owner:GameCamera):Bool
+	{
+		return Owner.player.down.triggered;
+	}
+
+	public static function holdingUp(Owner:GameCamera):Bool
+	{
+		return Owner.player.up.triggered;
+	}
+
+	public static function releaseLookingDown(Owner:GameCamera):Bool
+	{
+		return !Owner.player.down.check();
+	}
+
+	public static function releaseLookingUp(Owner:GameCamera):Bool
+	{
+		return !Owner.player.up.check();
+	}
 }
 
 // Also the zooming class lol
@@ -166,6 +195,12 @@ class Idle extends FlxFSMState<GameCamera>
 		if (rate <= 1)
 		{
 			var zoomRate = rate.circInOut().lerp(owner.zoom, 1);
+			if (owner.scroll.x != owner.realTarget.x && owner.scroll.y != owner.realTarget.y)
+			{
+				var rateX = rate.circInOut().lerp(owner.scroll.x, owner.realTarget.x);
+				var rateY = rate.circInOut().lerp(owner.scroll.y, owner.realTarget.y);
+				owner.scroll.set(rateX, rateY);
+			}
 			// var yRate = rate.circInOut().lerp(owner.scroll.y, owner.realTarget.y - 25);
 			owner.zoom = zoomRate;
 			// owner.scroll.y = yRate;
@@ -201,6 +236,84 @@ class Follow extends FlxFSMState<GameCamera>
 		{
 			var rateX = rate.circInOut().lerp(owner.scroll.x, owner.realTarget.x);
 			var rateY = rate.circInOut().lerp(owner.scroll.y, owner.realTarget.y);
+			var zoomRate = rate.circIn().lerp(owner.zoom, 1.25);
+			owner.zoom = zoomRate;
+			owner.scroll.set(rateX, rateY);
+			frameCount += 0.50;
+		}
+		else
+		{
+			frameCount = 0;
+		}
+	}
+
+	override function exit(owner:GameCamera)
+	{
+		frameCount = 0;
+	}
+}
+
+class LookingDown extends FlxFSMState<GameCamera>
+{
+	private var frameCount:Float = 0;
+
+	public static var TOTAL_FRAME:Int = 180; // 3 Second tween
+
+	override function enter(owner:GameCamera, fsm:FlxFSM<GameCamera>):Void {}
+
+	override function update(elapsed:Float, owner:GameCamera, fsm:FlxFSM<GameCamera>):Void
+	{
+		followPlayer(owner);
+	}
+
+	function followPlayer(owner:GameCamera)
+	{
+		var rate = frameCount / TOTAL_FRAME;
+
+		// An animation when rate is 0 to 1.
+		if (rate <= 1)
+		{
+			var rateX = rate.circInOut().lerp(owner.scroll.x, owner.realTarget.x);
+			var rateY = rate.circInOut().lerp(owner.scroll.y, owner.realTarget.y + 100);
+			var zoomRate = rate.circIn().lerp(owner.zoom, 1.25);
+			owner.zoom = zoomRate;
+			owner.scroll.set(rateX, rateY);
+			frameCount += 0.50;
+		}
+		else
+		{
+			frameCount = 0;
+		}
+	}
+
+	override function exit(owner:GameCamera)
+	{
+		frameCount = 0;
+	}
+}
+
+class LookingUp extends FlxFSMState<GameCamera>
+{
+	private var frameCount:Float = 0;
+
+	public static var TOTAL_FRAME:Int = 180; // 3 Second tween
+
+	override function enter(owner:GameCamera, fsm:FlxFSM<GameCamera>):Void {}
+
+	override function update(elapsed:Float, owner:GameCamera, fsm:FlxFSM<GameCamera>):Void
+	{
+		followPlayer(owner);
+	}
+
+	function followPlayer(owner:GameCamera)
+	{
+		var rate = frameCount / TOTAL_FRAME;
+
+		// An animation when rate is 0 to 1.
+		if (rate <= 1)
+		{
+			var rateX = rate.circInOut().lerp(owner.scroll.x, owner.realTarget.x);
+			var rateY = rate.circInOut().lerp(owner.scroll.y, owner.realTarget.y - 100);
 			var zoomRate = rate.circIn().lerp(owner.zoom, 1.25);
 			owner.zoom = zoomRate;
 			owner.scroll.set(rateX, rateY);
