@@ -204,7 +204,7 @@ class Follow extends FlxFSMState<GameCamera>
 			var zoomRate = rate.circIn().lerp(owner.zoom, 1.25);
 			owner.zoom = zoomRate;
 			owner.scroll.set(rateX, rateY);
-			frameCount += 0.25;
+			frameCount += 0.50;
 		}
 		else
 		{
