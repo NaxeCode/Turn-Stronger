@@ -52,14 +52,16 @@ class GameCamera extends FlxCamera
 
 	public function initPlayer(passThruPlayerObj:Player)
 	{
-		if (passThruPlayerObj != null)
+		try
 		{
 			player = passThruPlayerObj;
 			FlxG.watch.add(player, "x", "player Y");
 			FlxG.watch.add(player, "y", "player Y");
 		}
-		else
-			trace("arg player null");
+		catch (e)
+		{
+			throw "Error: " + e;
+		}
 	}
 
 	override function update(elapsed:Float)
