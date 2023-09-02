@@ -11,10 +11,6 @@ using tweenxcore.Tools;
 
 class GameCamera extends FlxCamera
 {
-	private var frameCount:Float = 0;
-
-	public static var TOTAL_FRAME:Int = 180; // 3 Second tween
-
 	public var fsm:FlxFSM<GameCamera>;
 
 	public var player:Player;
@@ -113,23 +109,6 @@ class GameCamera extends FlxCamera
 		realTarget.set(player.x - (this.width / 2.5), player.y - (this.height / 2.5));
 	}
 
-	function dynamicStateActive()
-	{
-		var rate = frameCount / TOTAL_FRAME;
-
-		// An animation when rate is 0 to 1.
-		if (rate <= 1)
-		{
-			// Move x from 0 to 450 according to the value of rate.
-			// square.x = rate.quintOut().lerp(0, 450);
-			var realX = (scroll.x - player.x);
-			var realY = (scroll.y + player.y);
-			scroll.x = rate.quintOut().lerp(player.x, player.x);
-			scroll.y = rate.quintOut().lerp(player.y, player.y);
-		}
-		frameCount++;
-	}
-
 	override function destroy():Void
 	{
 		fsm.destroy();
@@ -172,7 +151,7 @@ class Conditions
 }
 
 // Also the zooming class lol
-class Idle extends FlxFSMState<GameCamera>
+class Idle extends FlxFSMState<GameCamera> implements Animatable
 {
 	private var frameCount:Float = 0;
 	private var TOTAL_FRAME:Int = 1200; // 30 Second tween
@@ -214,11 +193,11 @@ class Idle extends FlxFSMState<GameCamera>
 	}
 }
 
-class Follow extends FlxFSMState<GameCamera>
+class Follow extends FlxFSMState<GameCamera> implements Animatable
 {
 	private var frameCount:Float = 0;
 
-	public static var TOTAL_FRAME:Int = 180; // 3 Second tween
+	private var TOTAL_FRAME:Int = 180; // 3 Second tween
 
 	override function enter(owner:GameCamera, fsm:FlxFSM<GameCamera>):Void {}
 
@@ -253,11 +232,10 @@ class Follow extends FlxFSMState<GameCamera>
 	}
 }
 
-class LookingDown extends FlxFSMState<GameCamera>
+class LookingDown extends FlxFSMState<GameCamera> implements Animatable
 {
 	private var frameCount:Float = 0;
-
-	public static var TOTAL_FRAME:Int = 180; // 3 Second tween
+	private var TOTAL_FRAME:Int = 180; // 3 Second tween
 
 	override function enter(owner:GameCamera, fsm:FlxFSM<GameCamera>):Void {}
 
@@ -292,11 +270,10 @@ class LookingDown extends FlxFSMState<GameCamera>
 	}
 }
 
-class LookingUp extends FlxFSMState<GameCamera>
+class LookingUp extends FlxFSMState<GameCamera> implements Animatable
 {
 	private var frameCount:Float = 0;
-
-	public static var TOTAL_FRAME:Int = 180; // 3 Second tween
+	private var TOTAL_FRAME:Int = 180; // 3 Second tween
 
 	override function enter(owner:GameCamera, fsm:FlxFSM<GameCamera>):Void {}
 
@@ -329,4 +306,10 @@ class LookingUp extends FlxFSMState<GameCamera>
 	{
 		frameCount = 0;
 	}
+}
+
+interface Animatable
+{
+	private var frameCount:Float;
+	private var TOTAL_FRAME:Int; // 3 Second tween
 }
