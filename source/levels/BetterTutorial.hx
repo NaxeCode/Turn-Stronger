@@ -9,7 +9,6 @@ import flixel.FlxG;
 import flixel.FlxObject;
 import flixel.FlxObject;
 import flixel.FlxSprite;
-import flixel.FlxState;
 import flixel.group.FlxGroup.FlxTypedGroup;
 import flixel.group.FlxSpriteGroup;
 import flixel.math.FlxMath;
@@ -24,19 +23,11 @@ import utils.dialog.Reg;
 
 using tweenxcore.Tools;
 
-class BetterTutorial extends FlxState
+class BetterTutorial extends LevelBase
 {
 	private var frameCount = 0;
 
 	public static var TOTAL_FRAME:Int = 120;
-
-	public var player:Player;
-
-	var collider:FlxSpriteGroup;
-	var background:FlxSpriteGroup;
-
-	public var noah:NPC;
-	public var npcs:FlxTypedGroup<NPC>;
 
 	public var dialogueBox:DialogueBox;
 
@@ -52,15 +43,13 @@ class BetterTutorial extends FlxState
 		add(dialogueBox);
 
 		FlxG.camera.flash(FlxColor.BLACK, 4);
-		gameCamera = new GameCamera(0, 0, FlxG.width, FlxG.height, 1.25);
+		gameCamera = new GameCamera(0, 0, FlxG.width, FlxG.height, 1.50);
 		uiCamera = new UiCamera(0, 0, FlxG.width, FlxG.height);
 
 		dialogueBox.cameras = [uiCamera];
 		uiCamera.ui_element.push(dialogueBox);
 		trace(uiCamera.ui_element);
 		dialogueBox.scrollFactor.set(0, 0);
-
-		buildWorld();
 
 		gameCamera.initPlayer(player);
 		// var w:Float = (gameCamera.width / 4);
@@ -71,88 +60,11 @@ class BetterTutorial extends FlxState
 		FlxG.cameras.add(uiCamera, false);
 	}
 
-	function buildWorld()
-	{
-		var project = new LdtkProject();
-
-		// Create a FlxGroup for all level layers
-		collider = new FlxSpriteGroup();
-
-		background = new FlxSpriteGroup();
-		add(background);
-
-		// Iterate all world levels
-		for (level in project.all_worlds.Default.levels)
-		{
-			// Place it using level world coordinates (in pixels)
-			collider.setPosition(level.worldX, level.worldY);
-			background.setPosition(level.worldX, level.worldY);
-
-			createEntities(level.l_Entities);
-
-			// Attach level background image, if any
-			if (level.hasBgImage())
-				background.add(level.getBgSprite());
-
-			// Render layer "Background"
-			level.l_Background.render(background);
-
-			// Render layer "Collisions"
-			level.l_Collisions.render(collider);
-		}
-
-		for (tile in collider)
-		{
-			tile.immovable = true;
-		}
-		add(collider);
-	}
-
-	function createEntities(entityLayer:LdtkProject.Layer_Entities)
-	{
-		var x:Int;
-		var y:Int;
-
-		x = entityLayer.all_Noah[0].pixelX;
-		y = entityLayer.all_Noah[0].pixelY;
-
-		npcs = new FlxTypedGroup<NPC>();
-
-		noah = new NPC(x, y);
-		noah.text = entityLayer.all_Noah[0].f_string;
-		noah.loadGraphic(AssetPaths.Noah__png, false, 32, 64);
-		// trace(noah.width);
-		// trace(noah.height);
-		noah.setFacingFlip(LEFT, true, false);
-		noah.setFacingFlip(LEFT, false, false);
-
-		// npcs.add(noah);
-		// add(noah);
-
-		noah.facing = LEFT;
-
-		x = entityLayer.all_Player[0].pixelX;
-		y = entityLayer.all_Player[0].pixelY;
-
-		player = new Player(x, y);
-		add(player);
-	}
-
 	override public function update(elapsed:Float)
 	{
 		handleDialogBox();
 
-		// if (activateCamera)
-		// watchForFlip();
-
 		super.update(elapsed);
-
-		if (FlxG.keys.justPressed.H)
-		{
-			// gameCamera.target = null;
-			// gameCamera.scroll.x += 100;
-			// gameCamera.target = player;
-		}
 
 		FlxG.collide(collider, player);
 	}
