@@ -23,7 +23,7 @@ import utils.dialog.Reg;
 
 using tweenxcore.Tools;
 
-class BetterTutorial extends LevelBase
+class Playground extends LevelBase
 {
 	private var frameCount = 0;
 
