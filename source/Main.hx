@@ -1,7 +1,7 @@
 package;
 
 import flixel.FlxGame;
-import levels.BetterTutorial;
+import levels.Playground;
 import openfl.display.Sprite;
 
 class Main extends Sprite
@@ -9,6 +9,6 @@ class Main extends Sprite
 	public function new()
 	{
 		super();
-		addChild(new FlxGame(640, 480, BetterTutorial, 60, 60, true));
+		addChild(new FlxGame(640, 480, Playground, 60, 60, true));
 	}
 }
