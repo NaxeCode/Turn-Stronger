@@ -84,8 +84,8 @@ class LevelBase extends FlxState
 
 		noah.facing = LEFT;
 
-		x = entityLayer.all_Player[0].pixelX;
-		y = entityLayer.all_Player[0].pixelY;
+		x = entityLayer.all_PlayerStart[0].pixelX;
+		y = entityLayer.all_PlayerStart[0].pixelY;
 
 		player = new Player(x, y);
 		trace("X: " + x);
