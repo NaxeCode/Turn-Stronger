@@ -4,6 +4,7 @@ import flixel.FlxCamera;
 import flixel.FlxG;
 import flixel.FlxSprite;
 import flixel.addons.util.FlxFSM;
+import flixel.math.FlxMath;
 import flixel.math.FlxPoint;
 import flixel.util.FlxTimer;
 
@@ -14,11 +15,12 @@ class GameCamera extends FlxCamera
 	public var fsm:FlxFSM<GameCamera>;
 
 	public var player:Player;
+	public var camera_point:FlxPoint;
 
 	public var realTarget:FlxPoint;
 
 	private var active_follow:Bool = false;
-	private var active_player:Bool = true;
+	private var active_player:Bool = false;
 
 	public function new(X:Int = 0, Y:Int = 0, Width:Int = 0, Height:Int = 0, Zoom:Float = 0)
 	{
@@ -40,6 +42,8 @@ class GameCamera extends FlxCamera
 
 	function initFSM()
 	{
+		camera_point = new FlxPoint(0, 0);
+
 		fsm = new FlxFSM(this);
 		fsm.transitions.add(Idle, Follow, Conditions.follow);
 		fsm.transitions.add(Idle, LookingDown, Conditions.holdingDown);
@@ -59,7 +63,8 @@ class GameCamera extends FlxCamera
 	{
 		try
 		{
-			player = passThruPlayerObj;
+			target = player = passThruPlayerObj;
+			active_player = true;
 			FlxG.watch.add(player, "x", "player Y");
 			FlxG.watch.add(player, "y", "player Y");
 		}
@@ -71,42 +76,12 @@ class GameCamera extends FlxCamera
 
 	override function update(elapsed:Float)
 	{
-		fsm.update(elapsed);
-		checkState();
-		flowState();
-
-		super.update(elapsed);
-	}
-
-	function checkState()
-	{
-		if (scroll.x != player.x - (this.width / 2.5) || scroll.y != player.y - (this.height / 2.5))
-			active_follow = true;
-		else
-			active_follow = false;
-	}
-
-	function flowState()
-	{
 		if (active_player)
 		{
-			initRealTarget();
-			updateRealTarget();
+			fsm.update(elapsed);
 		}
-	}
 
-	function initRealTarget()
-	{
-		if (realTarget == null)
-			realTarget = new FlxPoint(player.x - (this.width / 2.5), player.y - (this.height / 2.5));
-
-		FlxG.watch.add(realTarget, "x", "realTarget X:");
-		FlxG.watch.add(realTarget, "y", "realTarget Y:");
-	}
-
-	function updateRealTarget()
-	{
-		realTarget.set(player.x - (this.width / 2.5), player.y - (this.height / 2.5));
+		super.update(elapsed);
 	}
 
 	override function destroy():Void
@@ -115,18 +90,37 @@ class GameCamera extends FlxCamera
 		fsm = null;
 		super.destroy();
 	}
+
+	// a function that creates a new FlxPoint and returns it.
+
+	public function isOverlaping():Bool
+	{
+		target.getMidpoint(camera_point);
+		camera_point.addPoint(targetOffset);
+
+		// FlxMath.inBounds();
+
+		if (scroll.x != camera_point.x - width * 0.5 || scroll.y != camera_point.y - height * 0.5)
+		{
+			return false;
+		}
+		else
+		{
+			return true;
+		}
+	}
 }
 
 class Conditions
 {
 	public static function follow(Owner:GameCamera):Bool
 	{
-		return (Owner.scroll.x != Owner.player.x - (Owner.width / 2.5) || Owner.scroll.y != Owner.player.y - (Owner.height / 2.5));
+		return Owner.isOverlaping();
 	}
 
 	public static function stopped(Owner:GameCamera):Bool
 	{
-		return !(Owner.scroll.x != Owner.player.x - (Owner.width / 2.5) || Owner.scroll.y != Owner.player.y - (Owner.height / 2.5));
+		return !Owner.isOverlaping();
 	}
 
 	public static function holdingDown(Owner:GameCamera):Bool
@@ -151,10 +145,16 @@ class Conditions
 }
 
 // Also the zooming class lol
-class Idle extends FlxFSMState<GameCamera> implements Animatable
+class Idle extends FlxFSMState<GameCamera>
 {
-	private var frameCount:Float = 0;
-	private var TOTAL_FRAME:Int = 1200; // 30 Second tween
+	public static var frameCount:Float = 0;
+
+	public var TOTAL_FRAME:Int = 1200; // 30 Second tween
+
+	public static function resetTween()
+	{
+		frameCount = 0;
+	}
 
 	override function enter(owner:GameCamera, fsm:FlxFSM<GameCamera>):Void
 	{
@@ -173,11 +173,11 @@ class Idle extends FlxFSMState<GameCamera> implements Animatable
 		// An animation when rate is 0 to 1.
 		if (rate <= 1)
 		{
-			var zoomRate = rate.circInOut().lerp(owner.zoom, 1);
-			if (owner.scroll.x != owner.realTarget.x && owner.scroll.y != owner.realTarget.y)
+			var zoomRate = rate.circInOut().lerp(owner.zoom, 1.75);
+			if (owner.scroll.x != owner.target.x && owner.scroll.y != owner.target.y)
 			{
-				var rateX = rate.circInOut().lerp(owner.scroll.x, owner.realTarget.x);
-				var rateY = rate.circInOut().lerp(owner.scroll.y, owner.realTarget.y);
+				var rateX = rate.circInOut().lerp(owner.scroll.x, owner.target.x);
+				var rateY = rate.circInOut().lerp(owner.scroll.y, owner.target.y);
 				owner.scroll.set(rateX, rateY);
 			}
 			// var yRate = rate.circInOut().lerp(owner.scroll.y, owner.realTarget.y - 25);
@@ -193,11 +193,16 @@ class Idle extends FlxFSMState<GameCamera> implements Animatable
 	}
 }
 
-class Follow extends FlxFSMState<GameCamera> implements Animatable
+class Follow extends FlxFSMState<GameCamera>
 {
-	private var frameCount:Float = 0;
+	public static var frameCount:Float = 0;
 
-	private var TOTAL_FRAME:Int = 180; // 3 Second tween
+	public var TOTAL_FRAME:Int = 180; // 3 Second tween
+
+	public static function resetTween()
+	{
+		frameCount = 0;
+	}
 
 	override function enter(owner:GameCamera, fsm:FlxFSM<GameCamera>):Void {}
 
@@ -213,8 +218,8 @@ class Follow extends FlxFSMState<GameCamera> implements Animatable
 		// An animation when rate is 0 to 1.
 		if (rate <= 1)
 		{
-			var rateX = rate.circInOut().lerp(owner.scroll.x, owner.realTarget.x);
-			var rateY = rate.circInOut().lerp(owner.scroll.y, owner.realTarget.y);
+			var rateX = rate.circInOut().lerp(owner.scroll.x, owner.target.x);
+			var rateY = rate.circInOut().lerp(owner.scroll.y, owner.target.y);
 			var zoomRate = rate.circIn().lerp(owner.zoom, 1.25);
 			owner.zoom = zoomRate;
 			owner.scroll.set(rateX, rateY);
@@ -232,12 +237,15 @@ class Follow extends FlxFSMState<GameCamera> implements Animatable
 	}
 }
 
-class LookingDown extends FlxFSMState<GameCamera> implements Animatable
+class LookingDown extends FlxFSMState<GameCamera>
 {
-	private var frameCount:Float = 0;
-	private var TOTAL_FRAME:Int = 180; // 3 Second tween
+	public var frameCount:Float = 0;
+	public var TOTAL_FRAME:Int = 180; // 3 Second tween
 
-	override function enter(owner:GameCamera, fsm:FlxFSM<GameCamera>):Void {}
+	override function enter(owner:GameCamera, fsm:FlxFSM<GameCamera>):Void
+	{
+		frameCount = 0;
+	}
 
 	override function update(elapsed:Float, owner:GameCamera, fsm:FlxFSM<GameCamera>):Void
 	{
@@ -251,8 +259,8 @@ class LookingDown extends FlxFSMState<GameCamera> implements Animatable
 		// An animation when rate is 0 to 1.
 		if (rate <= 1)
 		{
-			var rateX = rate.circInOut().lerp(owner.scroll.x, owner.realTarget.x);
-			var rateY = rate.circInOut().lerp(owner.scroll.y, owner.realTarget.y + 100);
+			var rateX = rate.circInOut().lerp(owner.scroll.x, owner.target.x);
+			var rateY = rate.circInOut().lerp(owner.scroll.y, owner.target.y + 100);
 			var zoomRate = rate.circIn().lerp(owner.zoom, 1.25);
 			owner.zoom = zoomRate;
 			owner.scroll.set(rateX, rateY);
@@ -270,12 +278,15 @@ class LookingDown extends FlxFSMState<GameCamera> implements Animatable
 	}
 }
 
-class LookingUp extends FlxFSMState<GameCamera> implements Animatable
+class LookingUp extends FlxFSMState<GameCamera>
 {
-	private var frameCount:Float = 0;
-	private var TOTAL_FRAME:Int = 180; // 3 Second tween
+	public var frameCount:Float = 0;
+	public var TOTAL_FRAME:Int = 180; // 3 Second tween
 
-	override function enter(owner:GameCamera, fsm:FlxFSM<GameCamera>):Void {}
+	override function enter(owner:GameCamera, fsm:FlxFSM<GameCamera>):Void
+	{
+		frameCount = 0;
+	}
 
 	override function update(elapsed:Float, owner:GameCamera, fsm:FlxFSM<GameCamera>):Void
 	{
@@ -289,8 +300,8 @@ class LookingUp extends FlxFSMState<GameCamera> implements Animatable
 		// An animation when rate is 0 to 1.
 		if (rate <= 1)
 		{
-			var rateX = rate.circInOut().lerp(owner.scroll.x, owner.realTarget.x);
-			var rateY = rate.circInOut().lerp(owner.scroll.y, owner.realTarget.y - 100);
+			var rateX = rate.circInOut().lerp(owner.scroll.x, owner.target.x);
+			var rateY = rate.circInOut().lerp(owner.scroll.y, owner.target.y - 100);
 			var zoomRate = rate.circIn().lerp(owner.zoom, 1.25);
 			owner.zoom = zoomRate;
 			owner.scroll.set(rateX, rateY);
@@ -308,8 +319,8 @@ class LookingUp extends FlxFSMState<GameCamera> implements Animatable
 	}
 }
 
-interface Animatable
+abstract class Animatable
 {
-	private var frameCount:Float;
-	private var TOTAL_FRAME:Int; // 3 Second tween
+	public var frameCount:Float;
+	public var TOTAL_FRAME:Int; // 3 Second tween
 }

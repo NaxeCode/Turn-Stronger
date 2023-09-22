@@ -43,7 +43,7 @@ class Playground extends LevelBase
 		add(dialogueBox);
 
 		FlxG.camera.flash(FlxColor.BLACK, 4);
-		gameCamera = new GameCamera(0, 0, FlxG.width, FlxG.height, 1.50);
+		gameCamera = new GameCamera(0, 0, FlxG.width, FlxG.height);
 		uiCamera = new UiCamera(0, 0, FlxG.width, FlxG.height);
 
 		dialogueBox.cameras = [uiCamera];
