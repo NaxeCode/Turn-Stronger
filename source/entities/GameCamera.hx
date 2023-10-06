@@ -198,6 +198,10 @@ class Follow extends FlxFSMState<GameCamera>
 	{
 		var rate = frameCount / TOTAL_FRAME;
 
+		var offsetAmount:Int = 50;
+		if (owner.player.flipX)
+			offsetAmount = -offsetAmount;
+
 		// An animation when rate is 0 to 1.
 		if (rate <= 1)
 		{
