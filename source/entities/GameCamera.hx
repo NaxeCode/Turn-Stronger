@@ -17,7 +17,7 @@ class GameCamera extends FlxCamera
 
 	public var fsm:FlxFSM<GameCamera>;
 
-	public var player:Player;
+	public var player:Kaito;
 
 	public var realTarget:FlxPoint;
 
@@ -50,7 +50,7 @@ class GameCamera extends FlxCamera
 		fsm.transitions.start(Idle);
 	}
 
-	public function initPlayer(passThruPlayerObj:Player)
+	public function initPlayer(passThruPlayerObj:Kaito)
 	{
 		if (passThruPlayerObj != null)
 		{

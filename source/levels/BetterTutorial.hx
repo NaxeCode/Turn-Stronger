@@ -1,8 +1,8 @@
 package levels;
 
 import entities.GameCamera;
+import entities.Kaito;
 import entities.NPC;
-import entities.Player;
 import entities.UiCamera;
 import flixel.FlxCamera;
 import flixel.FlxG;
@@ -30,7 +30,7 @@ class BetterTutorial extends FlxState
 
 	public static var TOTAL_FRAME:Int = 120;
 
-	public var player:Player;
+	public var player:Kaito;
 
 	var collider:FlxSpriteGroup;
 	var background:FlxSpriteGroup;
@@ -134,7 +134,7 @@ class BetterTutorial extends FlxState
 		x = entityLayer.all_Player[0].pixelX;
 		y = entityLayer.all_Player[0].pixelY;
 
-		player = new Player(x, y);
+		player = new Kaito(x, y);
 		add(player);
 	}
 

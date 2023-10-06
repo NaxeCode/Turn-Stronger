@@ -8,7 +8,7 @@ import flixel.util.FlxColor;
 import utils.assets.AssetPaths;
 import utils.dialog.Reg;
 
-class Player extends FlxSprite
+class Kaito extends FlxSprite
 {
 	var jumpPower:Int = 200;
 
