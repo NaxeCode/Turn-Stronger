@@ -9,6 +9,7 @@ import flixel.FlxG;
 import flixel.FlxObject;
 import flixel.FlxObject;
 import flixel.FlxSprite;
+import flixel.FlxState;
 import flixel.group.FlxGroup.FlxTypedGroup;
 import flixel.group.FlxSpriteGroup;
 import flixel.math.FlxMath;
@@ -23,13 +24,12 @@ import utils.dialog.Reg;
 
 using tweenxcore.Tools;
 
-class Playground extends LevelBase
+class BetterTutorial extends FlxState
 {
 	private var frameCount = 0;
 
 	public static var TOTAL_FRAME:Int = 120;
 
-<<<<<<< HEAD:source/levels/BetterTutorial.hx
 	public var player:Kaito;
 
 	var collider:FlxSpriteGroup;
@@ -38,8 +38,6 @@ class Playground extends LevelBase
 	public var noah:NPC;
 	public var npcs:FlxTypedGroup<NPC>;
 
-=======
->>>>>>> e6f651bd3a02a9386374e3d8bda16dd3194d841d:source/levels/Playground.hx
 	public var dialogueBox:DialogueBox;
 
 	public static var gameCamera:GameCamera;
@@ -54,13 +52,15 @@ class Playground extends LevelBase
 		add(dialogueBox);
 
 		FlxG.camera.flash(FlxColor.BLACK, 4);
-		gameCamera = new GameCamera(0, 0, FlxG.width, FlxG.height);
+		gameCamera = new GameCamera(0, 0, FlxG.width, FlxG.height, 1.25);
 		uiCamera = new UiCamera(0, 0, FlxG.width, FlxG.height);
 
 		dialogueBox.cameras = [uiCamera];
 		uiCamera.ui_element.push(dialogueBox);
 		trace(uiCamera.ui_element);
 		dialogueBox.scrollFactor.set(0, 0);
+
+		buildWorld();
 
 		gameCamera.initPlayer(player);
 		// var w:Float = (gameCamera.width / 4);
@@ -71,7 +71,6 @@ class Playground extends LevelBase
 		FlxG.cameras.add(uiCamera, false);
 	}
 
-<<<<<<< HEAD:source/levels/BetterTutorial.hx
 	function buildWorld()
 	{
 		var project = new LdtkProject();
@@ -139,13 +138,21 @@ class Playground extends LevelBase
 		add(player);
 	}
 
-=======
->>>>>>> e6f651bd3a02a9386374e3d8bda16dd3194d841d:source/levels/Playground.hx
 	override public function update(elapsed:Float)
 	{
 		handleDialogBox();
 
+		// if (activateCamera)
+		// watchForFlip();
+
 		super.update(elapsed);
+
+		if (FlxG.keys.justPressed.H)
+		{
+			// gameCamera.target = null;
+			// gameCamera.scroll.x += 100;
+			// gameCamera.target = player;
+		}
 
 		FlxG.collide(collider, player);
 	}
