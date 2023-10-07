@@ -3,6 +3,9 @@ package entities;
 import flixel.FlxG;
 import flixel.FlxObject;
 import flixel.FlxSprite;
+import flixel.input.actions.FlxAction.FlxActionDigital;
+import flixel.input.actions.FlxAction;
+import flixel.input.actions.FlxActionManager;
 import flixel.sound.FlxSound;
 import flixel.util.FlxColor;
 import utils.assets.AssetPaths;
@@ -13,6 +16,19 @@ class Kaito extends FlxSprite
 	var jumpPower:Int = 200;
 
 	var splatSound:FlxSound;
+
+	public static var actions:FlxActionManager;
+
+	public var up:FlxActionDigital;
+	public var down:FlxActionDigital;
+	public var left:FlxActionDigital;
+	public var right:FlxActionDigital;
+
+	public var jump:FlxActionDigital;
+
+	// var moveAnalog:FlxActionAnalog;
+	var trigger1:FlxActionAnalog;
+	var trigger2:FlxActionAnalog;
 
 	public function new(X:Int = 0, Y:Int = 0)
 	{
@@ -38,6 +54,58 @@ class Kaito extends FlxSprite
 		maxVelocity.set(100, 400);
 		acceleration.y = 400;
 		drag.x = maxVelocity.x * 4;
+
+		addInputs();
+	}
+
+	function addInputs()
+	{
+		// digital actions allow for on/off directional movement
+		up = new FlxActionDigital();
+		down = new FlxActionDigital();
+		left = new FlxActionDigital();
+		right = new FlxActionDigital();
+
+		jump = new FlxActionDigital();
+
+		// these actions don't do anything, but their values are exposed in the analog visualizer
+		trigger1 = new FlxActionAnalog();
+		trigger2 = new FlxActionAnalog();
+
+		// this analog action allows for smooth movement
+		// move = new FlxActionAnalog();
+
+		actions = FlxG.inputs.add(new FlxActionManager());
+		actions.addActions([up, down, left, right, trigger1, trigger2, jump]);
+
+		// Add keyboard inputs
+		up.addKey(UP, PRESSED);
+		up.addKey(W, PRESSED);
+		down.addKey(DOWN, PRESSED);
+		down.addKey(S, PRESSED);
+		left.addKey(LEFT, PRESSED);
+		left.addKey(A, PRESSED);
+		right.addKey(RIGHT, PRESSED);
+		right.addKey(D, PRESSED);
+		jump.addKey(SPACE, PRESSED);
+		jump.addKey(J, PRESSED);
+
+		// Add gamepad DPAD inputs
+		up.addGamepad(DPAD_UP, PRESSED);
+		down.addGamepad(DPAD_DOWN, PRESSED);
+		left.addGamepad(DPAD_LEFT, PRESSED);
+		right.addGamepad(DPAD_RIGHT, PRESSED);
+		jump.addGamepad(A, PRESSED);
+
+		// Add gamepad analog stick (as simulated DPAD) inputs
+		up.addGamepad(LEFT_STICK_DIGITAL_UP, PRESSED);
+		down.addGamepad(LEFT_STICK_DIGITAL_DOWN, PRESSED);
+		left.addGamepad(LEFT_STICK_DIGITAL_LEFT, PRESSED);
+		right.addGamepad(LEFT_STICK_DIGITAL_RIGHT, PRESSED);
+
+		// Add gamepad analog trigger inputs
+		trigger1.addGamepad(LEFT_TRIGGER, MOVED);
+		trigger2.addGamepad(RIGHT_TRIGGER, MOVED);
 	}
 
 	override function update(elapsed:Float)
@@ -58,19 +126,19 @@ class Kaito extends FlxSprite
 		if (!Reg.canMove)
 			return;
 
-		if (FlxG.keys.anyPressed([LEFT, A]))
+		if (left.triggered)
 		{
 			acceleration.x = -maxVelocity.x * 4;
 			facing = LEFT;
 		}
 
-		if (FlxG.keys.anyPressed([RIGHT, D]))
+		if (right.triggered)
 		{
 			acceleration.x = maxVelocity.x * 4;
 			facing = RIGHT;
 		}
 
-		if (FlxG.keys.anyJustPressed([SPACE, UP, W]) && isTouching(FLOOR))
+		if (jump.triggered && isTouching(FLOOR))
 		{
 			velocity.y = -jumpPower;
 		}
