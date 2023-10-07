@@ -5,8 +5,28 @@ import flixel.FlxObject;
 import flixel.FlxSprite;
 import flixel.sound.FlxSound;
 import flixel.util.FlxColor;
+import haxe.Json;
 import utils.assets.AssetPaths;
 import utils.dialog.Reg;
+
+typedef FrameTag =
+{
+	var name:String;
+	var from:Int;
+	var to:Int;
+	var looped:Bool;
+}
+
+typedef MetaData =
+{
+	var size:{w:Int, h:Int};
+	var frameTags:Array<FrameTag>;
+}
+
+typedef MyJsonData =
+{
+	var meta:MetaData;
+}
 
 class Kaito extends FlxSprite
 {
@@ -20,20 +40,22 @@ class Kaito extends FlxSprite
 
 		splatSound = FlxG.sound.load(AssetPaths.splat__ogg, 1);
 
-		// makeGraphic(16, 16, FlxColor.fromInt(0xFF273769));
-		loadGraphic(AssetPaths.player_no_glass__png, true, 32, 32);
+		var jzon:MyJsonData = Json.parse(sys.io.File.getContent(AssetPaths.kaito__json));
 
+		loadGraphic(AssetPaths.kaito__png, true, jzon.meta.size.h, jzon.meta.size.w);
 		setFacingFlip(LEFT, true, false);
 		setFacingFlip(RIGHT, false, false);
 
-		animation.add("idle", [0, 1, 2, 3], 10, true);
-		animation.add("run", [4, 5, 6, 7, 8], 10, true);
-		animation.add("jump", [9, 10, 11], 30, true);
+		// parse through an array
+		for (tag in jzon.meta.frameTags)
+		{
+			animation.add(tag.name, [for (i in tag.from...tag.to) i], 7, tag.looped);
+		}
 
-		width = 13;
-		height = 13;
-		offset.y += 12;
-		offset.x += 9;
+		// width = 13;
+		// height = 13;
+		offset.y -= 8;
+		// offset.x += 9;
 
 		maxVelocity.set(100, 400);
 		acceleration.y = 400;
@@ -73,6 +95,7 @@ class Kaito extends FlxSprite
 		if (FlxG.keys.anyJustPressed([SPACE, UP, W]) && isTouching(FLOOR))
 		{
 			velocity.y = -jumpPower;
+			animation.play("jump");
 		}
 	}
 
@@ -86,10 +109,7 @@ class Kaito extends FlxSprite
 
 	function handleAnimation()
 	{
-		if (velocity.y != 0)
-		{
-			animation.play("jump");
-		}
+		if (velocity.y != 0) {}
 		else if (this.isTouching(FLOOR) && velocity.x != 0)
 		{
 			animation.play("run");
