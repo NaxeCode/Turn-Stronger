@@ -48,6 +48,8 @@ class BetterTutorial extends FlxState
 	{
 		super.create();
 
+		FlxG.log.redirectTraces = true;
+
 		dialogueBox = new DialogueBox();
 		add(dialogueBox);
 
