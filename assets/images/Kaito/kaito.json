@@ -1,0 +1,10 @@
+{
+  "meta": {
+    "size": { "w": 48, "h": 48 },
+    "frameTags": [
+     { "name": "idle", "from": 0, "to": 9, "looped": true },
+     { "name": "run", "from": 10, "to": 17, "looped": true },
+     { "name": "jump", "from": 18, "to": 20, "looped": false }
+    ]
+ }
+}
