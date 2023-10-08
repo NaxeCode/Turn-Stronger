@@ -51,6 +51,18 @@ class Kaito extends FlxSprite
 		for (tag in jzon.meta.frameTags)
 		{
 			animation.add(tag.name, [for (i in tag.from...tag.to) i], tag.fps, tag.looped);
+			#if debug
+			trace("Animation Loaded: "
+				+ tag.name
+				+ " from "
+				+ tag.from
+				+ " to "
+				+ tag.to
+				+ " at "
+				+ tag.fps
+				+ " fps "
+				+ (tag.looped ? " LOOPED" : ""));
+			#end
 		}
 
 		// width = 13;
