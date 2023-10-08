@@ -39,9 +39,20 @@ class Kaito extends FlxSprite
 	{
 		super(X, Y);
 
-		splatSound = FlxG.sound.load(AssetPaths.splat__ogg, 1);
+		setSFX();
+		setAnimation();
+		setHitbox();
+		setPhysics();
+	}
 
-		var jzon:MyJsonData = Json.parse(sys.io.File.getContent(AssetPaths.kaito__json));
+	function setSFX()
+	{
+		splatSound = FlxG.sound.load(AssetPaths.splat__ogg, 1);
+	}
+
+	function setAnimation()
+	{
+		var jzon:MyJsonData = animationParser();
 
 		loadGraphic(AssetPaths.kaito__png, true, jzon.meta.size.h, jzon.meta.size.w);
 		setFacingFlip(LEFT, true, false);
@@ -64,12 +75,24 @@ class Kaito extends FlxSprite
 				+ (tag.looped ? " LOOPED" : ""));
 			#end
 		}
+	}
 
+	function animationParser():MyJsonData
+	{
+		var jzon:MyJsonData = Json.parse(sys.io.File.getContent(AssetPaths.kaito__json));
+		return jzon;
+	}
+
+	function setHitbox()
+	{
 		// width = 13;
 		// height = 13;
 		offset.y -= 8;
 		// offset.x += 9;
+	}
 
+	function setPhysics()
+	{
 		maxVelocity.set(100, 400);
 		acceleration.y = 400;
 		drag.x = maxVelocity.x * 4;
