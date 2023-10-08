@@ -14,6 +14,7 @@ typedef FrameTag =
 	var name:String;
 	var from:Int;
 	var to:Int;
+	var fps:Float;
 	var looped:Bool;
 }
 
@@ -49,7 +50,7 @@ class Kaito extends FlxSprite
 		// parse through an array
 		for (tag in jzon.meta.frameTags)
 		{
-			animation.add(tag.name, [for (i in tag.from...tag.to) i], 7, tag.looped);
+			animation.add(tag.name, [for (i in tag.from...tag.to) i], tag.fps, tag.looped);
 		}
 
 		// width = 13;
