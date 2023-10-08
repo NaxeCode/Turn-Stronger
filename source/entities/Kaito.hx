@@ -85,10 +85,10 @@ class Kaito extends FlxSprite
 
 	function setHitbox()
 	{
-		// width = 13;
-		// height = 13;
-		offset.y -= 8;
-		// offset.x += 9;
+		width = 16;
+		height = 32;
+		offset.y += 9;
+		offset.x += 16;
 	}
 
 	function setPhysics()
