@@ -64,7 +64,7 @@ class BetterTutorial extends FlxState
 
 		buildWorld();
 
-		gameCamera.initPlayer(player);
+		// gameCamera.initPlayer(player);
 		// var w:Float = (gameCamera.width / 4);
 		// var h:Float = (gameCamera.height / 3);
 		// gameCamera.deadzone = FlxRect.get((gameCamera.width - w) / 2, (gameCamera.height - h) / 2 - h * 0.25, w, h);
